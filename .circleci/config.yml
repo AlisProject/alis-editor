@@ -1,0 +1,33 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:8.9.4-browsers
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+
+      - run: yarn install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run: yarn lint
+      - run:
+          name: Format
+          command: |
+            yarn format;
+            git diff --exit-code --quiet;
+            if [ $? = 1 ]; then
+              echo 'Unformat file(s) found.';
+              exit 1
+            fi
