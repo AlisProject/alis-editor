@@ -1,7 +1,6 @@
 {
   "name": "frontend-application-editor",
   "version": "0.1.0",
-  "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -9,9 +8,19 @@
     "format": "prettier-eslint --write \"./**/*.{js,vue}\" --ignore \"./node_modules/**\" "
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-basic-styles": "^10.1.0",
+    "@ckeditor/ckeditor5-block-quote": "^10.1.1",
+    "@ckeditor/ckeditor5-editor-balloon": "^11.0.2",
+    "@ckeditor/ckeditor5-essentials": "^10.1.3",
+    "@ckeditor/ckeditor5-heading": "^10.1.1",
+    "@ckeditor/ckeditor5-link": "^10.1.0",
+    "@ckeditor/ckeditor5-paragraph": "^10.0.4",
+    "@ckeditor/ckeditor5-theme-lark": "^12.0.0",
     "vue": "^2.5.21"
   },
   "devDependencies": {
+    "@ckeditor/ckeditor5-dev-utils": "^11.0.1",
+    "@ckeditor/ckeditor5-dev-webpack-plugin": "^7.0.1",
     "@vue/cli-plugin-babel": "^3.3.0",
     "@vue/cli-plugin-eslint": "^3.3.0",
     "@vue/cli-service": "^3.3.0",
@@ -20,8 +29,10 @@
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0",
     "node-sass": "^4.9.0",
+    "postcss-loader": "^3.0.0",
     "prettier-eslint": "^8.8.2",
     "prettier-eslint-cli": "^4.7.1",
+    "raw-loader": "^0.5.1",
     "sass-loader": "^7.0.1",
     "vue-template-compiler": "^2.5.21"
   }

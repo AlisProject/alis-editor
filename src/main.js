@@ -1,8 +1,5 @@
 import Vue from 'vue'
-import App from './App.vue'
-
-Vue.config.productionTip = false
-
+import FrontendApplicationEditorPc from './FrontendApplicationEditorPc.vue'
 new Vue({
-  render: (h) => h(App)
-}).$mount('#app')
+  render: (h) => h(FrontendApplicationEditorPc)
+}).$mount('#alis-editor')
