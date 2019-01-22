@@ -1,9 +1,10 @@
 {
-  "name": "frontend-application-editor",
+  "name": "@alisproject/alis-editor",
   "version": "0.1.0",
+  "main": "dist/AlisEditor.common.js",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --target lib --name AlisEditor src/index.js",
     "lint": "vue-cli-service lint",
     "format": "prettier-eslint --write \"./**/*.{js,vue}\" --ignore \"./node_modules/**\" "
   },

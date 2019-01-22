@@ -1,4 +1,4 @@
-# frontend-application-editor
+# alis-editor
 
 ## Project setup
 ```
