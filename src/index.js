@@ -1,2 +1,2 @@
-import FrontendApplicationEditorPc from './FrontendApplicationEditorPc.vue'
-export { FrontendApplicationEditorPc }
+import AlisEditorPc from './AlisEditorPc.vue'
+export { AlisEditorPc }
