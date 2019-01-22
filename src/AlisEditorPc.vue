@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import BalloonEditor from '@ckeditor/ckeditor5-editor-balloon/src/ballooneditor'
 import BoldPlugin from '@ckeditor/ckeditor5-basic-styles/src/bold'
 import ItalicPlugin from '@ckeditor/ckeditor5-basic-styles/src/italic'
@@ -17,7 +16,7 @@ import HeadingButtonsUI from '@ckeditor/ckeditor5-heading/src/headingbuttonsui'
 import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote'
 import EssentialsPlugin from '@ckeditor/ckeditor5-essentials/src/essentials'
 
-export default Vue.extend({
+export default {
   data() {
     return {
       editor: null
@@ -48,7 +47,7 @@ export default Vue.extend({
       this.editor = editor
     })
   }
-})
+}
 </script>
 
 <style lang="scss">
