@@ -15,8 +15,22 @@ import Heading from '@ckeditor/ckeditor5-heading/src/heading'
 import HeadingButtonsUI from '@ckeditor/ckeditor5-heading/src/headingbuttonsui'
 import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote'
 import EssentialsPlugin from '@ckeditor/ckeditor5-essentials/src/essentials'
+import Image from '@ckeditor/ckeditor5-image/src/image'
+import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar'
+import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption'
+import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle'
+import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload'
+import CustomUploadAdapterPlugin from '@/plugins/CustomUploadAdapterPlugin'
 
 export default {
+  props: {
+    articleId: {
+      type: String
+    },
+    clientId: {
+      type: String
+    }
+  },
   data() {
     return {
       editor: null
@@ -24,6 +38,7 @@ export default {
   },
   mounted() {
     BalloonEditor.create(document.querySelector('#editor'), {
+      extraPlugins: [CustomUploadAdapterPlugin.bind(null, this.articleId, this.clientId)],
       plugins: [
         EssentialsPlugin,
         BoldPlugin,
@@ -33,7 +48,12 @@ export default {
         HeadingButtonsUI,
         ParagraphButtonUI,
         Paragraph,
-        BlockQuote
+        BlockQuote,
+        Image,
+        ImageToolbar,
+        ImageCaption,
+        ImageStyle,
+        ImageUpload
       ],
       toolbar: ['bold', 'italic', 'link', 'heading1', 'heading2', 'paragraph', 'blockQuote'],
       heading: {
@@ -42,6 +62,16 @@ export default {
           { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
           { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' }
         ]
+      },
+      image: {
+        toolbar: [
+          'imageTextAlternative',
+          '|',
+          'imageStyle:alignLeft',
+          'imageStyle:full',
+          'imageStyle:alignRight'
+        ],
+        styles: ['full', 'alignLeft', 'alignRight']
       }
     }).then((editor) => {
       this.editor = editor
