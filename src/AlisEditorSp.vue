@@ -14,8 +14,22 @@ import Heading from '@/plugins/heading'
 import HeadingButtonsUI from '@ckeditor/ckeditor5-heading/src/headingbuttonsui'
 import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote'
 import EssentialsPlugin from '@ckeditor/ckeditor5-essentials/src/essentials'
+import CustomUploadAdapterPlugin from '@/plugins/CustomUploadAdapterPlugin'
+import Image from '@ckeditor/ckeditor5-image/src/image'
+import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar'
+import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption'
+import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle'
+import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload'
 
 export default {
+  props: {
+    articleId: {
+      type: String
+    },
+    clientId: {
+      type: String
+    }
+  },
   data() {
     return {
       editor: null
@@ -23,6 +37,7 @@ export default {
   },
   mounted() {
     ClassicEditor.create(document.querySelector('#editor'), {
+      extraPlugins: [CustomUploadAdapterPlugin.bind(null, this.articleId, this.clientId)],
       plugins: [
         EssentialsPlugin,
         BoldPlugin,
@@ -31,9 +46,14 @@ export default {
         Heading,
         HeadingButtonsUI,
         Paragraph,
-        BlockQuote
+        BlockQuote,
+        Image,
+        ImageToolbar,
+        ImageCaption,
+        ImageStyle,
+        ImageUpload
       ],
-      toolbar: ['heading1', 'heading2', 'blockQuote', 'bold', 'italic', 'link'],
+      toolbar: ['heading1', 'heading2', 'blockQuote', 'bold', 'italic', 'link', 'imageUpload'],
       heading: {
         options: [
           { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
