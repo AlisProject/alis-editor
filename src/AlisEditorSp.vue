@@ -10,8 +10,7 @@ import BoldPlugin from '@ckeditor/ckeditor5-basic-styles/src/bold'
 import ItalicPlugin from '@ckeditor/ckeditor5-basic-styles/src/italic'
 import LinkPlugin from '@ckeditor/ckeditor5-link/src/link'
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph'
-import ParagraphButtonUI from '@ckeditor/ckeditor5-paragraph/src/paragraphbuttonui'
-import Heading from '@ckeditor/ckeditor5-heading/src/heading'
+import Heading from '@/plugins/heading'
 import HeadingButtonsUI from '@ckeditor/ckeditor5-heading/src/headingbuttonsui'
 import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote'
 import EssentialsPlugin from '@ckeditor/ckeditor5-essentials/src/essentials'
@@ -31,11 +30,10 @@ export default {
         LinkPlugin,
         Heading,
         HeadingButtonsUI,
-        ParagraphButtonUI,
         Paragraph,
         BlockQuote
       ],
-      toolbar: ['bold', 'italic', 'link', 'heading1', 'heading2', 'paragraph', 'blockQuote'],
+      toolbar: ['heading1', 'heading2', 'blockQuote', 'bold', 'italic', 'link'],
       heading: {
         options: [
           { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
