@@ -11,7 +11,6 @@
   "dependencies": {
     "@ckeditor/ckeditor5-basic-styles": "^10.1.0",
     "@ckeditor/ckeditor5-block-quote": "^10.1.1",
-    "@ckeditor/ckeditor5-easy-image": "^10.0.4",
     "@ckeditor/ckeditor5-editor-balloon": "^11.0.2",
     "@ckeditor/ckeditor5-editor-classic": "^11.0.2",
     "@ckeditor/ckeditor5-essentials": "^10.1.3",

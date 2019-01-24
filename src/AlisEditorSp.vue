@@ -15,8 +15,9 @@ import Heading from '@ckeditor/ckeditor5-heading/src/heading'
 import HeadingButtonsUI from '@ckeditor/ckeditor5-heading/src/headingbuttonsui'
 import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote'
 import EssentialsPlugin from '@ckeditor/ckeditor5-essentials/src/essentials'
-import EasyImage from '@ckeditor/ckeditor5-easy-image/src/easyimage'
 import CustomUploadAdapterPlugin from '@/plugins/CustomUploadAdapterPlugin'
+import Image from '@ckeditor/ckeditor5-image/src/image'
+import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload'
 
 export default {
   props: {
@@ -45,7 +46,8 @@ export default {
         ParagraphButtonUI,
         Paragraph,
         BlockQuote,
-        EasyImage
+        Image,
+        ImageUpload
       ],
       toolbar: [
         'bold',
