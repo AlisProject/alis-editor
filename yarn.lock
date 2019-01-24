@@ -657,6 +657,13 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
+"@ckeditor/ckeditor-cloud-services-core@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor-cloud-services-core/-/ckeditor-cloud-services-core-2.0.0.tgz#19fed5470d2d849ed1617cde00845c2a649a035f"
+  integrity sha512-UPt7GH5KMkfqraNWuPUIsGH38p2aws/XhKt7k+CI4v4QkX68zJNP7MFPHT/3dt4jNjd2bGbo2xt3bSUnbTOHGg==
+  dependencies:
+    "@ckeditor/ckeditor5-utils" "^11.0.0"
+
 "@ckeditor/ckeditor5-basic-styles@^10.1.0":
   version "10.1.0"
   resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-basic-styles/-/ckeditor5-basic-styles-10.1.0.tgz#2e504f1f177ab4050f8a2f3fa9ca4cbb74a0e9f3"
@@ -681,6 +688,15 @@
   dependencies:
     "@ckeditor/ckeditor5-core" "^11.1.0"
     "@ckeditor/ckeditor5-engine" "^12.0.0"
+
+"@ckeditor/ckeditor5-cloud-services@^10.1.1":
+  version "10.1.1"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-cloud-services/-/ckeditor5-cloud-services-10.1.1.tgz#4ce08da667dcabe88c389b387195e8418b3197bd"
+  integrity sha512-j+RqmU8TD420JM+rQou1WaBRp/NbskBgDITlg9fs/ZBdW1wQCNyBFD4qV89ZKGkVKz8ovYNJuDMsDf5BlLLESw==
+  dependencies:
+    "@ckeditor/ckeditor-cloud-services-core" "^2.0.0"
+    "@ckeditor/ckeditor5-core" "^11.1.0"
+    "@ckeditor/ckeditor5-utils" "^11.1.0"
 
 "@ckeditor/ckeditor5-core@^11.1.0":
   version "11.1.0"
@@ -720,6 +736,17 @@
     chalk "^2.4.1"
     rimraf "^2.6.2"
     webpack-sources "^1.1.0"
+
+"@ckeditor/ckeditor5-easy-image@^10.0.4":
+  version "10.0.4"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-easy-image/-/ckeditor5-easy-image-10.0.4.tgz#254e1e8c05b78c4348d280dd69d621c5d7fed2b7"
+  integrity sha512-ntToow6a9lJbIuNvF0+vIEFo9aYFpGopDVUgBXhnBatrabL7HlC7nXhxrNg+BF3nEqSKZc3wcCpDWrvxLlVlUg==
+  dependencies:
+    "@ckeditor/ckeditor-cloud-services-core" "^2.0.0"
+    "@ckeditor/ckeditor5-cloud-services" "^10.1.1"
+    "@ckeditor/ckeditor5-core" "^11.1.0"
+    "@ckeditor/ckeditor5-image" "^12.0.0"
+    "@ckeditor/ckeditor5-upload" "^10.0.4"
 
 "@ckeditor/ckeditor5-editor-balloon@^11.0.2":
   version "11.0.2"
@@ -861,7 +888,7 @@
     "@ckeditor/ckeditor5-ui" "^11.2.0"
     "@ckeditor/ckeditor5-utils" "^11.1.0"
 
-"@ckeditor/ckeditor5-utils@^11.1.0":
+"@ckeditor/ckeditor5-utils@^11.0.0", "@ckeditor/ckeditor5-utils@^11.1.0":
   version "11.1.0"
   resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-utils/-/ckeditor5-utils-11.1.0.tgz#53535004ca9e2074fc0776b60a1706aa8af9a180"
   integrity sha512-QgjK5BHs2krdqv8OY7qR0SMEKePcLaBo+b26oh3vMuzdC0KckMytbngn+uIGRoGBiKiza5RwI51Wk4Y8zxKMxQ==
