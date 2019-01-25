@@ -1,15 +1,17 @@
 import axios from 'axios'
 
 export default class CustomUploadAdapter {
-  constructor(loader, articleId, clientId) {
+  constructor(loader, articleId, clientId, getUserSession) {
     this.loader = loader
     this.articleId = articleId
     this.clientId = clientId
+    this.getUserSession = getUserSession
   }
 
-  upload() {
+  async upload() {
     const file = this.loader.file
     const fileType = file.type.split('image/')[1].toLowerCase()
+    await this.getUserSession()
     const currentUser = localStorage.getItem(
       `CognitoIdentityServiceProvider.${this.clientId}.LastAuthUser`
     )

@@ -28,6 +28,9 @@ export default {
     },
     clientId: {
       type: String
+    },
+    getUserSession: {
+      type: Function
     }
   },
   data() {
@@ -37,7 +40,9 @@ export default {
   },
   mounted() {
     BalloonEditor.create(document.querySelector('#editor'), {
-      extraPlugins: [CustomUploadAdapterPlugin.bind(null, this.articleId, this.clientId)],
+      extraPlugins: [
+        CustomUploadAdapterPlugin.bind(null, this.articleId, this.clientId, this.getUserSession)
+      ],
       plugins: [
         EssentialsPlugin,
         BoldPlugin,
