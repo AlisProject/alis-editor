@@ -15,12 +15,14 @@ import HeadingButtonsUI from '@ckeditor/ckeditor5-heading/src/headingbuttonsui'
 import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote'
 import EssentialsPlugin from '@ckeditor/ckeditor5-essentials/src/essentials'
 import CustomUploadAdapterPlugin from '@/plugins/CustomUploadAdapterPlugin'
+import Autosave from '@ckeditor/ckeditor5-autosave/src/autosave'
 import Image from '@ckeditor/ckeditor5-image/src/image'
 import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar'
 import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption'
 import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle'
 import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload'
 import { isIOS } from '@/utils/device'
+import saveData from './Save'
 
 export default {
   props: {
@@ -40,6 +42,8 @@ export default {
     }
   },
   mounted() {
+    const articleId = this.articleId
+    const clientId = this.clientId
     ClassicEditor.create(document.querySelector('#editor'), {
       extraPlugins: [
         CustomUploadAdapterPlugin.bind(null, this.articleId, this.clientId, this.getUserSession)
@@ -57,9 +61,15 @@ export default {
         ImageToolbar,
         ImageCaption,
         ImageStyle,
-        ImageUpload
+        ImageUpload,
+        Autosave
       ],
       toolbar: ['heading1', 'heading2', 'blockQuote', 'bold', 'italic', 'link', 'imageUpload'],
+      autosave: {
+        save(editor) {
+          return saveData(editor.getData(), articleId, clientId)
+        }
+      },
       heading: {
         options: [
           { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
