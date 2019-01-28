@@ -1,32 +1,35 @@
 import axios from 'axios'
-
-export default function saveData(data, articleId, clientId, status) {
-  const currentUser = localStorage.getItem(
-    `CognitoIdentityServiceProvider.${clientId}.LastAuthUser`
-  )
-  const token = localStorage.getItem(
-    `CognitoIdentityServiceProvider.${clientId}.${currentUser}.idToken`
-  )
+export default function saveData(data, articleId, clientId, functions, status) {
   const params = {
     body: data
   }
   return new Promise(async (resolve, reject) => {
-    if (status === 'draft') {
-      try {
-        const res = await axios.put(`/api/me/articles/${articleId}/drafts/body`, params, {
-          headers: {
-            'Authorization': token,
-            'Content-Type': 'application/json'
-          }
-        })
-        setTimeout(() => {
-          console.log('Saved', data)
-          console.log(res)
-          resolve(res)
-        }, 1000)
-      } catch (error) {
-        reject(error)
-      }
+    await functions.getUserSession()
+    functions.setIsSaving({ isSaving: true })
+    functions.setIsEdited({ isEdited: true })
+    functions.setSaveStatus({ saveStatus: '保存中' })
+    const currentUser = localStorage.getItem(
+      `CognitoIdentityServiceProvider.${clientId}.LastAuthUser`
+    )
+    const token = localStorage.getItem(
+      `CognitoIdentityServiceProvider.${clientId}.${currentUser}.idToken`
+    )
+    try {
+      functions.updateBody({ body: data })
+      const res = await axios.put(`api/me/articles/${articleId}/${status}/body`, params, {
+        headers: {
+          Authorization: token,
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json'
+        }
+      })
+      functions.setSaveStatus({ saveStatus: '保存済み' })
+      functions.setIsSaving({ isSaving: false })
+      functions.setIsEdited({ isEdited: false })
+      resolve(res)
+    } catch (error) {
+      functions.sendNotification({ text: '記事の更新に失敗しました', type: 'warning' })
+      reject(error)
     }
   })
 }

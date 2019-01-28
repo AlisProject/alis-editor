@@ -34,6 +34,12 @@ export default {
     },
     getUserSession: {
       type: Function
+    },
+    functions: {
+      type: Object
+    },
+    status: {
+      type: String
     }
   },
   data() {
@@ -44,6 +50,8 @@ export default {
   mounted() {
     const articleId = this.articleId
     const clientId = this.clientId
+    const functions = this.functions
+    const status = this.status
     ClassicEditor.create(document.querySelector('#editor'), {
       extraPlugins: [
         CustomUploadAdapterPlugin.bind(null, this.articleId, this.clientId, this.getUserSession)
@@ -67,7 +75,7 @@ export default {
       toolbar: ['heading1', 'heading2', 'blockQuote', 'bold', 'italic', 'link', 'imageUpload'],
       autosave: {
         save(editor) {
-          return saveData(editor.getData(), articleId, clientId)
+          return saveData(editor.getData(), articleId, clientId, functions, status)
         }
       },
       heading: {

@@ -34,7 +34,13 @@ export default {
     getUserSession: {
       type: Function
     },
+    functions: {
+      type: Object
+    },
     status: {
+      type: String
+    },
+    editorContent: {
       type: String
     }
   },
@@ -46,6 +52,9 @@ export default {
   mounted() {
     const articleId = this.articleId
     const clientId = this.clientId
+    const functions = this.functions
+    const status = this.status
+    // const functions = this.functions
     BalloonEditor.create(document.querySelector('#editor'), {
       extraPlugins: [
         CustomUploadAdapterPlugin.bind(null, this.articleId, this.clientId, this.getUserSession)
@@ -69,7 +78,7 @@ export default {
       toolbar: ['heading1', 'heading2', 'blockQuote', 'bold', 'italic', 'link'],
       autosave: {
         save(editor) {
-          return saveData(editor.getData(), articleId, clientId, status)
+          return saveData(editor.getData(), articleId, clientId, functions, status)
         }
       },
       heading: {
@@ -91,6 +100,9 @@ export default {
       }
     }).then((editor) => {
       this.editor = editor
+      if (this.editorContent !== undefined) {
+        editor.setData(this.editorContent)
+      }
     })
   }
 }
