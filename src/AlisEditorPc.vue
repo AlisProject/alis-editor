@@ -54,7 +54,6 @@ export default {
     const clientId = this.clientId
     const functions = this.functions
     const status = this.status
-    // const functions = this.functions
     BalloonEditor.create(document.querySelector('#editor'), {
       extraPlugins: [
         CustomUploadAdapterPlugin.bind(null, this.articleId, this.clientId, this.getUserSession)
