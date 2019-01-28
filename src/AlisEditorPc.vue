@@ -31,9 +31,6 @@ export default {
     clientId: {
       type: String
     },
-    getUserSession: {
-      type: Function
-    },
     functions: {
       type: Object
     },
@@ -56,7 +53,7 @@ export default {
     const status = this.status
     BalloonEditor.create(document.querySelector('#editor'), {
       extraPlugins: [
-        CustomUploadAdapterPlugin.bind(null, this.articleId, this.clientId, this.getUserSession)
+        CustomUploadAdapterPlugin.bind(null, this.articleId, this.clientId, this.functions)
       ],
       plugins: [
         EssentialsPlugin,

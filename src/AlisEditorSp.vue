@@ -32,13 +32,13 @@ export default {
     clientId: {
       type: String
     },
-    getUserSession: {
-      type: Function
-    },
     functions: {
       type: Object
     },
     status: {
+      type: String
+    },
+    editorContent: {
       type: String
     }
   },
@@ -54,7 +54,7 @@ export default {
     const status = this.status
     ClassicEditor.create(document.querySelector('#editor'), {
       extraPlugins: [
-        CustomUploadAdapterPlugin.bind(null, this.articleId, this.clientId, this.getUserSession)
+        CustomUploadAdapterPlugin.bind(null, this.articleId, this.clientId, this.functions)
       ],
       plugins: [
         EssentialsPlugin,
@@ -99,6 +99,9 @@ export default {
 
       this.modifyEnterMode(editor)
       this.editor = editor
+      if (this.editorContent !== undefined) {
+        editor.setData(this.editorContent)
+      }
     })
   },
   methods: {
