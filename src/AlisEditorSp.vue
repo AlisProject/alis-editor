@@ -20,6 +20,8 @@ import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar'
 import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption'
 import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle'
 import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload'
+import { isIOS } from '@/utils/device'
+import '@/assets/stylesheets/ckeditor-sp.scss'
 
 export default {
   props: {
@@ -39,6 +41,9 @@ export default {
     }
   },
   mounted() {
+    if (isIOS()) {
+      window.addEventListener('scroll', this.fixHeader)
+    }
     ClassicEditor.create(document.querySelector('#editor'), {
       extraPlugins: [
         CustomUploadAdapterPlugin.bind(null, this.articleId, this.clientId, this.getUserSession)
@@ -67,16 +72,29 @@ export default {
         ]
       }
     }).then((editor) => {
+      const checkIfShouldBeSticky = editor.ui.view.stickyPanel._checkIfShouldBeSticky.bind(
+        editor.ui.view.stickyPanel
+      )
+      editor.ui.view.stickyPanel._checkIfShouldBeSticky = () => {
+        if (isIOS()) return
+        checkIfShouldBeSticky()
+      }
+
       this.editor = editor
     })
+  },
+  beforeDestroy() {
+    if (isIOS()) {
+      window.removeEventListener('scroll', this.fixHeader)
+    }
+  },
+  methods: {
+    fixHeader() {
+      document.querySelector('.ck-toolbar').style.top = `${window.pageYOffset + 56}px`
+    }
   }
 }
 </script>
 
 <style lang="scss">
-.container {
-  width: 640px;
-  margin: 10px auto;
-  font-size: 16px;
-}
 </style>

@@ -20,6 +20,7 @@ import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption'
 import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle'
 import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload'
 import CustomUploadAdapterPlugin from '@/plugins/CustomUploadAdapterPlugin'
+import '@/assets/stylesheets/ckeditor-pc.scss'
 
 export default {
   props: {
@@ -84,9 +85,4 @@ export default {
 </script>
 
 <style lang="scss">
-.container {
-  width: 640px;
-  margin: 10px auto;
-  font-size: 16px;
-}
 </style>
