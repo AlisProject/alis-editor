@@ -76,7 +76,7 @@ export default {
      * Enter が押された場合、shiftEnter の処理を実行する。
      * ただし、Enter が２回続けて押された場合は、通常通り Enter の処理を実行する（当処理では何もしない）
      */
-    modifyEnterMode: function(editor) {
+    modifyEnterMode(editor) {
       editor.editing.view.document.on(
         'enter',
         (evt, data) => {
@@ -96,7 +96,6 @@ export default {
      * 改行のオペレーションかどうかを判断
      */
     isEnterOperation(targetOperation) {
-      console.log(targetOperation)
       // split タイプの場合は改行と判断
       if (targetOperation.type === 'split') {
         return true
@@ -107,7 +106,6 @@ export default {
         targetOperation.nodes._nodes.length === 1 &&
         targetOperation.nodes._nodes[0].name === 'softBreak'
       ) {
-        console.log(targetOperation.position.path[0])
         return true
       }
       // 上記以外は 改行でないと判断
