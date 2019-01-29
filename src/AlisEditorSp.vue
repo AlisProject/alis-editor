@@ -67,8 +67,50 @@ export default {
         ]
       }
     }).then((editor) => {
+      this.modifyEnterMode(editor)
       this.editor = editor
     })
+  },
+  methods: {
+    /**
+     * Enter が押された場合、shiftEnter の処理を実行する。
+     * ただし、Enter が２回続けて押された場合は、通常通り Enter の処理を実行する（当処理では何もしない）
+     */
+    modifyEnterMode(editor) {
+      editor.editing.view.document.on(
+        'enter',
+        (evt, data) => {
+          const preOperation =
+            editor.model.document.history._operations[editor.model.document.version - 1]
+          if (!data.isSoft && !this.isEnterOperation(preOperation)) {
+            editor.execute('shiftEnter')
+            data.preventDefault()
+            evt.stop()
+            editor.editing.view.scrollToTheSelection()
+          }
+        },
+        { priority: 'high' }
+      )
+    },
+    /**
+     * 改行のオペレーションかどうかを判断
+     */
+    isEnterOperation(targetOperation) {
+      // split タイプの場合は改行と判断
+      if (targetOperation.type === 'split') {
+        return true
+      }
+      // insert タイプかつ、softBreak の場合は改行と判断
+      if (
+        targetOperation.type === 'insert' &&
+        targetOperation.nodes._nodes.length === 1 &&
+        targetOperation.nodes._nodes[0].name === 'softBreak'
+      ) {
+        return true
+      }
+      // 上記以外は 改行でないと判断
+      return false
+    }
   }
 }
 </script>
