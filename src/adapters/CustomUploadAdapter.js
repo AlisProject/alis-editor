@@ -1,11 +1,11 @@
 import axios from 'axios'
 
 export default class CustomUploadAdapter {
-  constructor(loader, articleId, clientId, getUserSession) {
+  constructor(loader, articleId, clientId, functions) {
     this.loader = loader
     this.articleId = articleId
     this.clientId = clientId
-    this.getUserSession = getUserSession
+    this.getUserSession = functions.getUserSession
   }
 
   async upload() {

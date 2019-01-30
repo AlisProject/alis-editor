@@ -9,6 +9,7 @@
     "format": "prettier-eslint --write \"./**/*.{js,vue}\" --ignore \"./node_modules/**\" "
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-autosave": "^10.0.2",
     "@ckeditor/ckeditor5-basic-styles": "^10.1.0",
     "@ckeditor/ckeditor5-block-quote": "^10.1.1",
     "@ckeditor/ckeditor5-editor-balloon": "^11.0.2",

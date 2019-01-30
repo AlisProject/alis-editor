@@ -657,6 +657,15 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
+"@ckeditor/ckeditor5-autosave@^10.0.2":
+  version "10.0.2"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-autosave/-/ckeditor5-autosave-10.0.2.tgz#14b6a984c1de4828a0dc18d736d1cfee1bf429a9"
+  integrity sha512-bFc9eYwV2FDP2XaOAXNourpw4Qf29RGwfGxZf+U0nPw1qv34iRHebzv/lx6+lbTE07mwM65a0D1sKPpwizr+Eg==
+  dependencies:
+    "@ckeditor/ckeditor5-core" "^11.1.0"
+    "@ckeditor/ckeditor5-utils" "^11.1.0"
+    lodash-es "^4.17.10"
+
 "@ckeditor/ckeditor5-basic-styles@^10.1.0":
   version "10.1.0"
   resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-basic-styles/-/ckeditor5-basic-styles-10.1.0.tgz#2e504f1f177ab4050f8a2f3fa9ca4cbb74a0e9f3"

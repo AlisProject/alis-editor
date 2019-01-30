@@ -15,12 +15,14 @@ import HeadingButtonsUI from '@ckeditor/ckeditor5-heading/src/headingbuttonsui'
 import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote'
 import EssentialsPlugin from '@ckeditor/ckeditor5-essentials/src/essentials'
 import CustomUploadAdapterPlugin from '@/plugins/CustomUploadAdapterPlugin'
+import Autosave from '@ckeditor/ckeditor5-autosave/src/autosave'
 import Image from '@ckeditor/ckeditor5-image/src/image'
 import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar'
 import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption'
 import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle'
 import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload'
 import { isIOS } from '@/utils/device'
+import saveData from '@/utils/Save'
 
 export default {
   props: {
@@ -30,8 +32,12 @@ export default {
     clientId: {
       type: String
     },
-    getUserSession: {
-      type: Function
+    functions: {
+      type: Object
+    },
+    editorContent: {
+      type: String,
+      default: null
     }
   },
   data() {
@@ -40,9 +46,10 @@ export default {
     }
   },
   mounted() {
+    const { articleId, clientId, functions } = this
     ClassicEditor.create(document.querySelector('#editor'), {
       extraPlugins: [
-        CustomUploadAdapterPlugin.bind(null, this.articleId, this.clientId, this.getUserSession)
+        CustomUploadAdapterPlugin.bind(null, articleId, clientId, functions)
       ],
       plugins: [
         EssentialsPlugin,
@@ -57,15 +64,31 @@ export default {
         ImageToolbar,
         ImageCaption,
         ImageStyle,
-        ImageUpload
+        ImageUpload,
+        Autosave
       ],
       toolbar: ['heading1', 'heading2', 'blockQuote', 'bold', 'italic', 'link', 'imageUpload'],
+      autosave: {
+        save(editor) {
+          return saveData(editor.getData(), articleId, clientId, functions)
+        }
+      },
       heading: {
         options: [
           { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
           { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
           { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' }
         ]
+      },
+      image: {
+        toolbar: [
+          'imageTextAlternative',
+          '|',
+          'imageStyle:alignLeft',
+          'imageStyle:full',
+          'imageStyle:alignRight'
+        ],
+        styles: ['full', 'alignLeft', 'alignRight']
       }
     }).then((editor) => {
       const checkIfShouldBeSticky = editor.ui.view.stickyPanel._checkIfShouldBeSticky.bind(
@@ -81,6 +104,9 @@ export default {
 
       this.modifyEnterMode(editor)
       this.editor = editor
+      if (this.editorContent !== null) {
+        editor.setData(this.editorContent)
+      }
     })
   },
   methods: {

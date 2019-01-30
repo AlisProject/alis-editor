@@ -20,6 +20,8 @@ import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption'
 import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle'
 import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload'
 import CustomUploadAdapterPlugin from '@/plugins/CustomUploadAdapterPlugin'
+import Autosave from '@ckeditor/ckeditor5-autosave/src/autosave'
+import saveData from '@/utils/Save'
 
 export default {
   props: {
@@ -29,8 +31,12 @@ export default {
     clientId: {
       type: String
     },
-    getUserSession: {
-      type: Function
+    functions: {
+      type: Object
+    },
+    editorContent: {
+      type: String,
+      default: null
     }
   },
   data() {
@@ -39,9 +45,10 @@ export default {
     }
   },
   mounted() {
+    const { articleId, clientId, functions } = this
     BalloonEditor.create(document.querySelector('#editor'), {
       extraPlugins: [
-        CustomUploadAdapterPlugin.bind(null, this.articleId, this.clientId, this.getUserSession)
+        CustomUploadAdapterPlugin.bind(null, articleId, clientId, functions)
       ],
       plugins: [
         EssentialsPlugin,
@@ -56,9 +63,15 @@ export default {
         ImageToolbar,
         ImageCaption,
         ImageStyle,
-        ImageUpload
+        ImageUpload,
+        Autosave
       ],
       toolbar: ['heading1', 'heading2', 'blockQuote', 'bold', 'italic', 'link'],
+      autosave: {
+        save(editor) {
+          return saveData(editor.getData(), articleId, clientId, functions)
+        }
+      },
       heading: {
         options: [
           { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
@@ -78,6 +91,9 @@ export default {
       }
     }).then((editor) => {
       this.editor = editor
+      if (this.editorContent !== null) {
+        editor.setData(this.editorContent)
+      }
     })
   }
 }
