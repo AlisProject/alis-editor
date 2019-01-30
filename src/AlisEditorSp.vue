@@ -71,6 +71,9 @@ export default {
       const checkIfShouldBeSticky = editor.ui.view.stickyPanel._checkIfShouldBeSticky.bind(
         editor.ui.view.stickyPanel
       )
+      // iOS では IME 表示時に stickyPanel の表示位置がずれるバグがある。
+      // 上記理由から iOS でのみ checkIfShouldBeSticky の処理を行わないようにしたいため、
+      // 一時的にメソッドの処理を退避させた上で、メソッドの処理を書き換えている。
       editor.ui.view.stickyPanel._checkIfShouldBeSticky = () => {
         if (isIOS()) return
         checkIfShouldBeSticky()
