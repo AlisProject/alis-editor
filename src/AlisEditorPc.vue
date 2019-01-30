@@ -84,9 +84,4 @@ export default {
 </script>
 
 <style lang="scss">
-.container {
-  width: 640px;
-  margin: 10px auto;
-  font-size: 16px;
-}
 </style>

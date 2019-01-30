@@ -20,6 +20,7 @@ import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar'
 import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption'
 import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle'
 import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload'
+import { isIOS } from '@/utils/device'
 
 export default {
   props: {
@@ -67,6 +68,17 @@ export default {
         ]
       }
     }).then((editor) => {
+      const checkIfShouldBeSticky = editor.ui.view.stickyPanel._checkIfShouldBeSticky.bind(
+        editor.ui.view.stickyPanel
+      )
+      // iOS では IME 表示時に stickyPanel の表示位置がずれるバグがある。
+      // 上記理由から iOS でのみ checkIfShouldBeSticky の処理を行わないようにしたいため、
+      // 一時的にメソッドの処理を退避させた上で、メソッドの処理を書き換えている。
+      editor.ui.view.stickyPanel._checkIfShouldBeSticky = () => {
+        if (isIOS()) return
+        checkIfShouldBeSticky()
+      }
+
       this.modifyEnterMode(editor)
       this.editor = editor
     })
@@ -116,9 +128,4 @@ export default {
 </script>
 
 <style lang="scss">
-.container {
-  width: 640px;
-  margin: 10px auto;
-  font-size: 16px;
-}
 </style>
