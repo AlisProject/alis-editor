@@ -1,6 +1,15 @@
 <template lang="html">
   <div id="ALISEditor">
     <div class="container" id="editor"></div>
+    <InsertButton
+      :articleId="articleId"
+      :editor="editor"
+      v-if="insertButton.isVisibleInsertButton"
+      :style="{
+        left: `calc(50% - 400px)`,
+        top: `${insertButton.posY}px`
+      }"
+    />
   </div>
 </template>
 
@@ -19,6 +28,7 @@ import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar'
 import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption'
 import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle'
 import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload'
+import InsertButton from './components/InsertButton';
 import CustomUploadAdapterPlugin from '@/plugins/CustomUploadAdapterPlugin'
 import Autosave from '@ckeditor/ckeditor5-autosave/src/autosave'
 import saveData from '@/utils/Save'
@@ -39,12 +49,38 @@ export default {
       default: null
     }
   },
+  components: {
+    InsertButton
+  },
   data() {
     return {
-      editor: null
+      editor: null,
+      insertButton: {
+        isVisibleInsertButton: false,
+        posX: 0,
+        posY: 0,
+        target: null
+      }
     }
   },
   mounted() {
+    // プラスボタンの挙動制御
+    document.addEventListener('selectionchange', () => {
+      const selection = window.getSelection()
+      const target = selection.anchorNode
+      if (target === null) {
+        this.insertButton.isVisibleInsertButton = false
+        return
+      }
+      if (target.textContent === "") {
+        const rect = target.getBoundingClientRect()
+        this.insertButton.posY = rect.top - 12 + window.pageYOffset
+        this.insertButton.isVisibleInsertButton = true
+      } else {
+        this.insertButton.isVisibleInsertButton = false
+      }
+    })
+    // propsを変数にset
     const { articleId, clientId, functions } = this
     BalloonEditor.create(document.querySelector('#editor'), {
       extraPlugins: [
