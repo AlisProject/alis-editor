@@ -35,7 +35,8 @@ export default {
       type: Object
     },
     editorContent: {
-      type: String
+      type: String,
+      default: null
     }
   },
   data() {
@@ -90,7 +91,7 @@ export default {
       }
     }).then((editor) => {
       this.editor = editor
-      if (this.editorContent) {
+      if (this.editorContent !== null) {
         editor.setData(this.editorContent)
       }
     })

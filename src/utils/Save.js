@@ -4,9 +4,15 @@ export default function saveData(body, articleId, clientId, functions) {
     functions.setIsEdited({ isEdited: true })
     functions.setSaveStatus({ saveStatus: '保存中' })
     try {
+      // Update body
       const article = { body }
       functions.updateBody({ body })
-      functions.putArticleBody({ article, articleId })
+      await functions.putArticleBody({ article, articleId })
+
+      // Update Thumbnail
+      functions.putThumbnail()
+
+      // Complete save
       functions.setSaveStatus({ saveStatus: '保存済み' })
       functions.setIsSaving({ isSaving: false })
       functions.setIsEdited({ isEdited: false })
