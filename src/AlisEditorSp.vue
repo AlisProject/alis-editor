@@ -48,9 +48,7 @@ export default {
   mounted() {
     const { articleId, clientId, functions } = this
     ClassicEditor.create(document.querySelector('#editor'), {
-      extraPlugins: [
-        CustomUploadAdapterPlugin.bind(null, articleId, clientId, functions)
-      ],
+      extraPlugins: [CustomUploadAdapterPlugin.bind(null, articleId, clientId, functions)],
       plugins: [
         EssentialsPlugin,
         BoldPlugin,
@@ -107,6 +105,7 @@ export default {
       if (this.editorContent !== null) {
         editor.setData(this.editorContent)
       }
+      this.$emit('editor-mounted')
     })
   },
   methods: {
