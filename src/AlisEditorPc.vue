@@ -32,9 +32,13 @@ import InsertButton from './components/InsertButton'
 import CustomUploadAdapterPlugin from '@/plugins/CustomUploadAdapterPlugin'
 import Autosave from '@ckeditor/ckeditor5-autosave/src/autosave'
 import Emptyness from 'ckeditor5-emptyness/src/emptyness'
+import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed'
 import saveData from '@/utils/Save'
 import iconHeading2 from '@/assets/icons/heading2.svg'
 import iconHeading3 from '@/assets/icons/heading3.svg'
+
+const IFRAME_SRC = '//cdn.iframe.ly/api/iframe'
+const API_KEY = 'xx'
 
 export default {
   props: {
@@ -86,7 +90,8 @@ export default {
         ImageStyle,
         ImageUpload,
         Autosave,
-        Emptyness
+        Emptyness,
+        MediaEmbed
       ],
       toolbar: ['heading2', 'heading3', 'blockQuote', 'bold', 'italic', 'link'],
       autosave: {
@@ -119,6 +124,144 @@ export default {
           'full',
           { name: 'alignLeft', title: '左寄せ画像' },
           { name: 'alignRight', title: '右寄せ画像' }
+        ]
+      },
+      mediaEmbed: {
+        previewsInData: false,
+        providers: [
+          {
+            name: 'twitter',
+            url: /^twitter\.com/,
+            html: match => {
+              const url = match['input'];
+              const urlArr = url.split('/')
+              let isTweet = false
+              if (urlArr[2] === 'status') {
+                isTweet = true
+              }
+              const iframeUrl = IFRAME_SRC + '?app=1&api_key=' + API_KEY + '&url=' + encodeURIComponent(url);
+              if (isTweet) {
+                return (
+                  '<div class="iframely-embed">' +
+                  '<div class="iframely-responsive">' +
+                  `<iframe src="${ iframeUrl }" ` +
+                  'frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>' +
+                  '</iframe>' +
+                  '</div>' +
+                  '</div>'
+                )
+              }
+              const screenName = urlArr[1]
+              console.log(screenName)
+              return (
+                '<div style="position: relative; padding-bottom: 180px;">' +
+                `<iframe src="http://localhost:3000/media_embed/twitter_profile/${screenName}" +
+                frameborder="0" allow="autoplay; encrypted-media" allowfullscreen +
+                style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;">` +
+                '</iframe>' +
+                '</div>'
+              )
+            }
+          },
+          {
+            name: 'facebook',
+            url: /^facebook\.com/,
+            html: match => {
+              const url = 'https://' + match['input'];
+              const iframeUrl = IFRAME_SRC + '?app=1&api_key=' + API_KEY + '&url=' + encodeURIComponent(url);
+              return (
+                '<div class="iframely-embed">' +
+                '<div class="iframely-responsive">' +
+                `<iframe src="${ iframeUrl }" ` +
+                'frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>' +
+                '</iframe>' +
+                '</div>' +
+                '</div>'
+              )
+            }
+          },
+          {
+             name: 'youtube',
+             url: [
+               /^youtube\.com\/watch\?v=([\w-]+)/,
+               /^youtube\.com\/v\/([\w-]+)/,
+               /^youtube\.com\/embed\/([\w-]+)/,
+               /^youtu\.be\/([\w-]+)/
+             ],
+             html: match => {
+               const id = match[ 1 ];
+               return (
+                 '<div style="position: relative; padding-bottom: 100%; height: 0; padding-bottom: 56.2493%;">' +
+                 `<iframe src="https://www.youtube.com/embed/${ id }" ` +
+                 'style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;" ' +
+                 'frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>' +
+                 '</iframe>' +
+                 '</div>'
+               );
+             }
+          },
+          {
+            name: 'gist',
+            url: /^gist\.github\.com/,
+            html: match => {
+              const url = 'https://' + match['input'];
+              const iframeUrl = IFRAME_SRC + '?app=1&api_key=' + API_KEY + '&url=' + encodeURIComponent(url);
+              return (
+                '<div class="iframely-embed">' +
+                '<div class="iframely-responsive">' +
+                `<iframe src="${ iframeUrl }" ` +
+                'frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>' +
+                '</iframe>' +
+                '</div>' +
+                '</div>'
+              );
+            }
+          },
+          {
+            name: 'instagram',
+            url: /^www\.instagram\.com\/p\/(\w+)/,
+            html: match => {
+              const url = 'https://' + match['input'];
+              const iframeUrl = IFRAME_SRC + '?app=1&api_key=' + API_KEY + '&url=' + encodeURIComponent(url);
+              return (
+                '<div class="iframely-embed">' +
+                '<div class="iframely-responsive">' +
+                `<iframe src="${ iframeUrl }" ` +
+                'frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>' +
+                '</iframe>' +
+                '</div>' +
+                '</div>'
+              );
+            }
+          },
+          {
+            name: 'any',
+            url: /.+/,
+            html: match => {
+              const url = match[0];
+              console.log(match)
+              console.log(encodeURIComponent(url))
+              // const iframeUrl = IFRAME_SRC + '?app=1&api_key=' + API_KEY + '&url=' + encodeURIComponent(url);
+              const data = axios.get(
+                `https://iframe.ly/api/iframely?api_key=${API_KEY}&url=${encodeURIComponent(url)}&omit_script=1&omit_css=1`
+              ).then(res => {
+                this.meta = res.data.meta
+                this.links = res.data.links
+              })
+              console.log(data)
+              if (this.meta !== null) {
+                return (
+                  '<a href="${url}" target="_blank" class="iframely-embed-card">' +
+                    `<div class="title">${this.meta.title || ''}</div>` +
+                    `<div class="description">${this.meta.description || ''}</div>` +
+                    `<img class="thumbnail" src="${(this.links.thumbnail && this.links.thumbnail[0].href) || (this.links.icon && this.links.icon[0].href)}">` +
+                    `<div class="site">あああ</div>` +
+                  '</a>'
+                );
+              }
+              return '<div>hoge</div>'
+            }
+          }
         ]
       }
     }).then((editor) => {

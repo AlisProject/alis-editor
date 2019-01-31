@@ -824,6 +824,22 @@
     "@ckeditor/ckeditor5-theme-lark" "^12.0.0"
     "@ckeditor/ckeditor5-ui" "^11.2.0"
 
+"@ckeditor/ckeditor5-media-embed@^10.1.0":
+  version "10.1.0"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-media-embed/-/ckeditor5-media-embed-10.1.0.tgz#0ca1870fe000669d1ee68f73b6c744efe453d407"
+  integrity sha512-c6gOnRBmzemkhQLSD+vIR/+gFWTpliVNKztdoKuH+kL++dm0BW9yJsEqokrzQx12u1wAN8zM3F2qxXNzUr1xaw==
+  dependencies:
+    "@ckeditor/ckeditor5-clipboard" "^10.0.4"
+    "@ckeditor/ckeditor5-core" "^11.1.0"
+    "@ckeditor/ckeditor5-engine" "^12.0.0"
+    "@ckeditor/ckeditor5-enter" "^10.1.3"
+    "@ckeditor/ckeditor5-image" "^12.0.0"
+    "@ckeditor/ckeditor5-theme-lark" "^12.0.0"
+    "@ckeditor/ckeditor5-ui" "^11.2.0"
+    "@ckeditor/ckeditor5-undo" "^10.0.4"
+    "@ckeditor/ckeditor5-utils" "^11.1.0"
+    "@ckeditor/ckeditor5-widget" "^10.3.1"
+
 "@ckeditor/ckeditor5-paragraph@^10.0.4":
   version "10.0.4"
   resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-paragraph/-/ckeditor5-paragraph-10.0.4.tgz#9e0527d996e04be7e78e098f0c465476498b4184"
