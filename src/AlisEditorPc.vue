@@ -4,7 +4,7 @@
     <InsertButton
       :articleId="articleId"
       :editor="editor"
-      v-if="insertButton.isVisibleInsertButton"
+      v-if="insertButton.isVisible"
       :style="{
         left: `calc(50% - 400px)`,
         top: `${insertButton.posY}px`
@@ -56,38 +56,14 @@ export default {
     return {
       editor: null,
       insertButton: {
-        isVisibleInsertButton: false,
-        posX: 0,
-        posY: 0,
-        target: null
+        isVisible: false,
+        posY: 0
       }
     }
   },
   mounted() {
     // プラスボタンの挙動制御
-    document.addEventListener('selectionchange', () => {
-      const selection = window.getSelection()
-      const target = selection.anchorNode
-      if (target === null) {
-        this.insertButton.isVisibleInsertButton = false
-        return
-      }
-      if (target.nodeName === 'FIGCAPTION') {
-        this.insertButton.isVisibleInsertButton = false
-        return
-      }
-      if (target.childNodes.length !== 0 && target.childNodes[0].className === 'area-title') {
-        this.insertButton.isVisibleInsertButton = false
-        return
-      }
-      if (target.textContent === '') {
-        const rect = target.getBoundingClientRect()
-        this.insertButton.posY = rect.top - 13 + window.pageYOffset
-        this.insertButton.isVisibleInsertButton = true
-      } else {
-        this.insertButton.isVisibleInsertButton = false
-      }
-    })
+    document.addEventListener('selectionchange', this.controlButton)
     // propsを変数にset
     const { articleId, clientId, functions } = this
     BalloonEditor.create(document.querySelector('#editor'), {
@@ -137,6 +113,30 @@ export default {
         editor.setData(this.editorContent)
       }
     })
+  },
+  methods: {
+    controlButton() {
+      const selection = window.getSelection()
+      const target = selection.anchorNode
+      if (target === null) {
+        this.insertButton.isVisible = false
+        return
+      }
+      if (target.nodeName !== 'P') {
+        this.insertButton.isVisible = false
+        return
+      }
+      if (target.textContent === '') {
+        const rect = target.getBoundingClientRect()
+        this.insertButton.posY = rect.top - 13 + window.pageYOffset
+        this.insertButton.isVisible = true
+      } else {
+        this.insertButton.isVisible = false
+      }
+    }
+  },
+  beforeDestroy() {
+    document.removeEventListener('selectionchange', this.controlButton)
   }
 }
 </script>

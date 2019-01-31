@@ -7,14 +7,14 @@
         'is-open': isOpen
       }"
     >
-      <span style="height: 30px;">+</span>
+      <span class="plus-button">+</span>
     </div>
     <ul class="insert-button__list" v-if="isOpen">
       <li class="insert-button__listItem" @click="dispatchUpload">
-        <img style="width: 15px; height: 15px;" src="../assets/camera.png" />
+        <img class="image-camera" src="@/assets/camera.png" />
       </li>
     </ul>
-    <input type="file" @change="handleUpload" />
+    <input type="file" class="image-file" accept="image/*" @change="handleUpload" />
   </div>
 </template>
 
@@ -27,7 +27,6 @@ export default {
   data() {
     return {
       isOpen: false,
-      doc: null,
       uploadFile: null
     }
   },
@@ -54,14 +53,14 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .insert-button {
   position: absolute;
   left: -100px;
   top: -100px;
   margin: 8px;
   cursor: pointer;
-  z-index: 1000000000000000000;
+  z-index: 100;
   display: flex;
 }
 
@@ -85,7 +84,7 @@ export default {
   box-shadow: 0 0 10px 0 hsla(0, 0%, 57%, 0.5);
 }
 
-.insert-button__toggle span {
+.insert-button__toggle .plus-button {
   pointer-events: event;
   user-select: none;
 }
@@ -98,7 +97,6 @@ export default {
   margin: 0;
   padding: 0;
   color: #fff;
-  overflow: hidden;
   display: flex;
   list-style-type: none;
   font-size: 1.4rem;
@@ -134,7 +132,16 @@ export default {
   border-left: solid 1px #fff;
 }
 
-input {
+.image-file {
   display: none;
+}
+
+.plus-button {
+  height: 30px;
+}
+
+.image-camera {
+  width: 15px;
+  height: 15px;
 }
 </style>
