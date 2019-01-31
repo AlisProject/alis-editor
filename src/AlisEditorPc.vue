@@ -28,7 +28,7 @@ import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar'
 import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption'
 import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle'
 import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload'
-import InsertButton from './components/InsertButton';
+import InsertButton from './components/InsertButton'
 import CustomUploadAdapterPlugin from '@/plugins/CustomUploadAdapterPlugin'
 import Autosave from '@ckeditor/ckeditor5-autosave/src/autosave'
 import saveData from '@/utils/Save'
@@ -72,9 +72,17 @@ export default {
         this.insertButton.isVisibleInsertButton = false
         return
       }
-      if (target.textContent === "") {
+      if (target.nodeName === 'FIGCAPTION') {
+        this.insertButton.isVisibleInsertButton = false
+        return
+      }
+      if (target.childNodes.length !== 0 && target.childNodes[0].className === 'area-title') {
+        this.insertButton.isVisibleInsertButton = false
+        return
+      }
+      if (target.textContent === '') {
         const rect = target.getBoundingClientRect()
-        this.insertButton.posY = rect.top - 12 + window.pageYOffset
+        this.insertButton.posY = rect.top - 13 + window.pageYOffset
         this.insertButton.isVisibleInsertButton = true
       } else {
         this.insertButton.isVisibleInsertButton = false
@@ -83,9 +91,7 @@ export default {
     // propsを変数にset
     const { articleId, clientId, functions } = this
     BalloonEditor.create(document.querySelector('#editor'), {
-      extraPlugins: [
-        CustomUploadAdapterPlugin.bind(null, articleId, clientId, functions)
-      ],
+      extraPlugins: [CustomUploadAdapterPlugin.bind(null, articleId, clientId, functions)],
       plugins: [
         EssentialsPlugin,
         BoldPlugin,
@@ -135,5 +141,4 @@ export default {
 }
 </script>
 
-<style lang="scss">
-</style>
+<style lang="scss"></style>

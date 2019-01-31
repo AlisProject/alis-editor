@@ -8,10 +8,12 @@
         'is-open': isOpen
       }"
     >
-      <span>+</span>
+      <span style="height: 30px;">+</span>
     </div>
     <ul class="insert-button__list" v-if="isOpen">
-      <li class="insert-button__listItem" @click="dispatchUpload">●</li>
+      <li class="insert-button__listItem" @click="dispatchUpload">
+        <img style="width: 15px; height: 15px;" src="../assets/camera.png" />
+      </li>
     </ul>
     <input type="file" @change="handleUpload" />
   </div>
@@ -35,7 +37,6 @@ export default {
       this.isOpen = !this.isOpen
     },
     dispatchUpload() {
-      console.log('hogehoge')
       this.$el.querySelector('[type="file"]').click()
     },
     handleUpload(event) {
@@ -47,33 +48,8 @@ export default {
       if (this.uploadFile === null) {
         return
       }
-      console.log(this.uploadFile)
       this.editor.execute('imageUpload', { file: this.uploadFile })
       this.uploadFile = null
-      // this.uploadImageSize = this.uploadFile.size
-      // this.uploadImageExtension = this.uploadFile.type
-      // const config = {
-      //   headers: {
-      //     'Authorization': this.token,
-      //     'Access-Control-Allow-Origin': '*',
-      //     'Content-Type': 'application/json'
-      //   },
-      //   params: {
-      //     'upload_image_size': this.uploadImageSize,
-      //     'upload_image_extension': this.uploadImageExtension
-      //   }
-      // }
-      // axios.get(`https://narisada.alis-test.tk/api/me/articles/${this.articleId}/image_upload_url`, config)
-      //   .then((res) => {
-      //     const json = JSON.parse(JSON.stringify(res.data))
-      //     axios.put(json['url'], this.uploadFile, {
-      //       headers: {
-      //         'Content-Type': this.uploadFile.type
-      //       }
-      //     }).then((res) => {
-      //       InsertImage(this.editor, `https://narisada.alis-test.tk/${json['upload_url_suffix']}`, '', this.doc)
-      //     })
-      //   })
     }
   }
 }
