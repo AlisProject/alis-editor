@@ -11,7 +11,7 @@
     </div>
     <ul class="insert-button__list" v-if="isOpen">
       <li class="insert-button__listItem" @click="dispatchUpload">
-        <img class="image-camera" src="@/assets/camera.png" />
+        <img class="image-upload" src="@/assets/image-upload.png" />
       </li>
     </ul>
     <input type="file" class="image-file" accept="image/*" @change="handleUpload" />
@@ -140,8 +140,7 @@ export default {
   height: 30px;
 }
 
-.image-camera {
-  width: 15px;
+.image-upload {
   height: 15px;
 }
 </style>
