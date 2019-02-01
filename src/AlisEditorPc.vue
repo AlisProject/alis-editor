@@ -1,6 +1,15 @@
 <template lang="html">
   <div id="ALISEditor">
     <div class="container" id="editor"></div>
+    <InsertButton
+      :articleId="articleId"
+      :editor="editor"
+      v-if="insertButton.isVisible"
+      :style="{
+        left: `calc(50% - 400px)`,
+        top: `${insertButton.posY}px`
+      }"
+    />
   </div>
 </template>
 
@@ -19,6 +28,7 @@ import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar'
 import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption'
 import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle'
 import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload'
+import InsertButton from './components/InsertButton'
 import CustomUploadAdapterPlugin from '@/plugins/CustomUploadAdapterPlugin'
 import Autosave from '@ckeditor/ckeditor5-autosave/src/autosave'
 import saveData from '@/utils/Save'
@@ -39,17 +49,25 @@ export default {
       default: null
     }
   },
+  components: {
+    InsertButton
+  },
   data() {
     return {
-      editor: null
+      editor: null,
+      insertButton: {
+        isVisible: false,
+        posY: 0
+      }
     }
   },
   mounted() {
+    // プラスボタンの挙動制御
+    document.addEventListener('selectionchange', this.controlButton)
+    // propsを変数にset
     const { articleId, clientId, functions } = this
     BalloonEditor.create(document.querySelector('#editor'), {
-      extraPlugins: [
-        CustomUploadAdapterPlugin.bind(null, articleId, clientId, functions)
-      ],
+      extraPlugins: [CustomUploadAdapterPlugin.bind(null, articleId, clientId, functions)],
       plugins: [
         EssentialsPlugin,
         BoldPlugin,
@@ -95,9 +113,32 @@ export default {
         editor.setData(this.editorContent)
       }
     })
+  },
+  methods: {
+    controlButton() {
+      const selection = window.getSelection()
+      const target = selection.anchorNode
+      if (target === null) {
+        this.insertButton.isVisible = false
+        return
+      }
+      if (target.nodeName !== 'P') {
+        this.insertButton.isVisible = false
+        return
+      }
+      if (target.textContent === '') {
+        const rect = target.getBoundingClientRect()
+        this.insertButton.posY = rect.top - 13 + window.pageYOffset
+        this.insertButton.isVisible = true
+      } else {
+        this.insertButton.isVisible = false
+      }
+    }
+  },
+  beforeDestroy() {
+    document.removeEventListener('selectionchange', this.controlButton)
   }
 }
 </script>
 
-<style lang="scss">
-</style>
+<style lang="scss"></style>
