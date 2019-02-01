@@ -79,14 +79,12 @@ export default {
         ]
       },
       image: {
-        toolbar: [
-          'imageTextAlternative',
-          '|',
-          'imageStyle:alignLeft',
-          'imageStyle:full',
-          'imageStyle:alignRight'
-        ],
-        styles: ['full', 'alignLeft', 'alignRight']
+        toolbar: ['imageStyle:alignLeft', 'imageStyle:full', 'imageStyle:alignRight'],
+        styles: [
+          'full',
+          { name: 'alignLeft', title: '左寄せ画像' },
+          { name: 'alignRight', title: '右寄せ画像' }
+        ]
       }
     }).then((editor) => {
       const checkIfShouldBeSticky = editor.ui.view.stickyPanel._checkIfShouldBeSticky.bind(
@@ -152,5 +150,4 @@ export default {
 }
 </script>
 
-<style lang="scss">
-</style>
+<style lang="scss"></style>

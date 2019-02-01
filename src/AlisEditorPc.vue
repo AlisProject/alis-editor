@@ -47,9 +47,7 @@ export default {
   mounted() {
     const { articleId, clientId, functions } = this
     BalloonEditor.create(document.querySelector('#editor'), {
-      extraPlugins: [
-        CustomUploadAdapterPlugin.bind(null, articleId, clientId, functions)
-      ],
+      extraPlugins: [CustomUploadAdapterPlugin.bind(null, articleId, clientId, functions)],
       plugins: [
         EssentialsPlugin,
         BoldPlugin,
@@ -80,14 +78,12 @@ export default {
         ]
       },
       image: {
-        toolbar: [
-          'imageTextAlternative',
-          '|',
-          'imageStyle:alignLeft',
-          'imageStyle:full',
-          'imageStyle:alignRight'
-        ],
-        styles: ['full', 'alignLeft', 'alignRight']
+        toolbar: ['imageStyle:alignLeft', 'imageStyle:full', 'imageStyle:alignRight'],
+        styles: [
+          'full',
+          { name: 'alignLeft', title: '左寄せ画像' },
+          { name: 'alignRight', title: '右寄せ画像' }
+        ]
       }
     }).then((editor) => {
       this.editor = editor
@@ -99,5 +95,4 @@ export default {
 }
 </script>
 
-<style lang="scss">
-</style>
+<style lang="scss"></style>
