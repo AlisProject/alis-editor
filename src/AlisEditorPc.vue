@@ -32,6 +32,8 @@ import InsertButton from './components/InsertButton'
 import CustomUploadAdapterPlugin from '@/plugins/CustomUploadAdapterPlugin'
 import Autosave from '@ckeditor/ckeditor5-autosave/src/autosave'
 import saveData from '@/utils/Save'
+import iconHeading2 from '@/assets/icons/heading2.svg'
+import iconHeading3 from '@/assets/icons/heading3.svg'
 
 export default {
   props: {
@@ -84,7 +86,7 @@ export default {
         ImageUpload,
         Autosave
       ],
-      toolbar: ['heading1', 'heading2', 'blockQuote', 'bold', 'italic', 'link'],
+      toolbar: ['heading2', 'heading3', 'blockQuote', 'bold', 'italic', 'link'],
       autosave: {
         save(editor) {
           return saveData(editor.getData(), articleId, clientId, functions)
@@ -93,8 +95,8 @@ export default {
       heading: {
         options: [
           { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-          { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-          { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' }
+          { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2', icon: iconHeading2 },
+          { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3', icon: iconHeading3 }
         ]
       },
       image: {
