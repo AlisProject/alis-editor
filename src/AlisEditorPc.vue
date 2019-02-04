@@ -38,7 +38,7 @@ import iconHeading2 from '@/assets/icons/heading2.svg'
 import iconHeading3 from '@/assets/icons/heading3.svg'
 
 const IFRAME_SRC = '//cdn.iframe.ly/api/iframe'
-const API_KEY = 'xxxx'
+const API_KEY = '518401c27d170fda5a9fbc'
 
 export default {
   props: {
