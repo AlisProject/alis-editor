@@ -29,8 +29,12 @@ export default class CustomUploadAdapter {
         upload_image_extension: fileType
       }
     }
+    const MAX_UPLOAD = 10 * 1024 * 1024 // 10 MB
     return new Promise(async (resolve, reject) => {
       try {
+        if (file.size > MAX_UPLOAD) {
+          throw new Error('画像は10MBまでアップロード可能です')
+        }
         const getResponse = await axios.get(
           `/api/me/articles/${this.articleId}/image_upload_url`,
           config
