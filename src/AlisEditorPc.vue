@@ -38,7 +38,6 @@ import iconHeading2 from '@/assets/icons/heading2.svg'
 import iconHeading3 from '@/assets/icons/heading3.svg'
 
 const IFRAME_SRC = '//cdn.iframe.ly/api/iframe'
-const API_KEY = '518401c27d170fda5a9fbc'
 
 export default {
   props: {
@@ -54,6 +53,12 @@ export default {
     editorContent: {
       type: String,
       default: null
+    },
+    iframeKey: {
+      type: String
+    },
+    domain: {
+      type: String
     }
   },
   components: {
@@ -139,7 +144,7 @@ export default {
               if (urlArr[2] === 'status') {
                 isTweet = true
               }
-              const iframeUrl = IFRAME_SRC + '?app=1&api_key=' + API_KEY + '&url=' + encodeURIComponent(url);
+              const iframeUrl = IFRAME_SRC + '?app=1&api_key=' + this.iframeKey + '&url=' + encodeURIComponent(url);
               if (isTweet) {
                 return (
                   '<div class="iframely-embed">' +
@@ -152,12 +157,11 @@ export default {
                 )
               }
               const userName = urlArr[1]
-              console.log('A0')
               return (
-                '<div style="position: relative; padding-bottom: 120px;">' +
-                `<iframe src="http://localhost:3000/media_embed/twitter_profile/${userName}" +
+                '<div class="iframe-twitter">' +
+                `<iframe src="https://${this.domain}/media_embed/twitter_profile/${userName}" +
                 frameborder="0" allow="autoplay; encrypted-media" allowfullscreen +
-                style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;">` +
+                class="twitter-content-area">` +
                 '</iframe>' +
                 '</div>'
               )
@@ -168,7 +172,7 @@ export default {
             url: /^facebook\.com/,
             html: match => {
               const url = 'https://' + match['input'];
-              const iframeUrl = IFRAME_SRC + '?app=1&api_key=' + API_KEY + '&url=' + encodeURIComponent(url);
+              const iframeUrl = IFRAME_SRC + '?app=1&api_key=' + this.iframeKey + '&url=' + encodeURIComponent(url);
               return (
                 '<div class="iframely-embed">' +
                 '<div class="iframely-responsive">' +
@@ -191,9 +195,9 @@ export default {
             html: match => {
               const id = match[ 1 ];
               return (
-                '<div style="position: relative; padding-bottom: 100%; height: 0; padding-bottom: 56.2493%;">' +
+                '<div class="iframe-youtube">' +
                 `<iframe src="https://www.youtube.com/embed/${ id }" ` +
-                'style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;" ' +
+                'class="youtube-content-area" ' +
                 'frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>' +
                 '</iframe>' +
                 '</div>'
@@ -205,7 +209,7 @@ export default {
             url: /^gist\.github\.com/,
             html: match => {
               const url = 'https://' + match['input'];
-              const iframeUrl = IFRAME_SRC + '?app=1&api_key=' + API_KEY + '&url=' + encodeURIComponent(url);
+              const iframeUrl = IFRAME_SRC + '?app=1&api_key=' + this.iframeKey + '&url=' + encodeURIComponent(url);
               return (
                 '<div class="iframely-embed">' +
                 '<div class="iframely-responsive">' +
@@ -222,7 +226,7 @@ export default {
             url: /^www\.instagram\.com\/p\/(\w+)/,
             html: match => {
               const url = 'https://' + match['input'];
-              const iframeUrl = IFRAME_SRC + '?app=1&api_key=' + API_KEY + '&url=' + encodeURIComponent(url);
+              const iframeUrl = IFRAME_SRC + '?app=1&api_key=' + this.iframeKey + '&url=' + encodeURIComponent(url);
               return (
                 '<div class="iframely-embed">' +
                 '<div class="iframely-responsive">' +
@@ -239,13 +243,11 @@ export default {
             url: /.+/,
             html: match => {
               const url = match[0]
-              console.log(url)
-              console.log('hoge')
               return (
-                '<div style="position: relative; padding-bottom: 140px;">' +
-                `<iframe src="http://localhost:3000/media_embed/any?url=${encodeURIComponent(url)}" +
+                '<div class="iframe-any">' +
+                `<iframe src="https://${this.domain}/media_embed/any?url=${encodeURIComponent(url)}" +
                 frameborder="0" allow="autoplay; encrypted-media" allowfullscreen +
-                style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;">` +
+                class="any-content-area">` +
                 '</iframe>' +
                 '</div>'
               )
@@ -287,4 +289,43 @@ export default {
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.iframe-twitter {
+  position: relative;
+  padding-bottom: 120px;
+
+  .twitter-content-area {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+}
+.iframe-any {
+  position: relative;
+  padding-bottom: 140px;
+
+  .any-content-area {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+}
+
+.iframe-youtube {
+  position: relative;
+  padding-bottom: 100%;
+  height: 0;
+  padding-bottom: 56.2493%;
+  .youtube-content-area {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+}
+</style>
