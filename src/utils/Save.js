@@ -5,9 +5,9 @@ export default function saveData(body, articleId, clientId, functions) {
     functions.setSaveStatus({ saveStatus: '保存中' })
     try {
       // Update body
-      const articleBody = { body }
+      const article = { body }
       functions.updateBody({ body })
-      await functions.putArticleBody({ articleBody, articleId })
+      await functions.putArticleBody({ article, articleId })
 
       // Update Thumbnail
       functions.putThumbnail()
