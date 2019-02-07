@@ -32,9 +32,11 @@ import InsertButton from './components/InsertButton'
 import CustomUploadAdapterPlugin from '@/plugins/CustomUploadAdapterPlugin'
 import Autosave from '@ckeditor/ckeditor5-autosave/src/autosave'
 import Emptyness from 'ckeditor5-emptyness/src/emptyness'
+import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed'
 import saveData from '@/utils/Save'
 import iconHeading2 from '@/assets/icons/heading2.svg'
 import iconHeading3 from '@/assets/icons/heading3.svg'
+import { IFRAMELY_API_ENDPOINT } from '@/utils/constant'
 
 export default {
   props: {
@@ -50,6 +52,12 @@ export default {
     editorContent: {
       type: String,
       default: null
+    },
+    iframelyApiKey: {
+      type: String
+    },
+    domain: {
+      type: String
     }
   },
   components: {
@@ -86,7 +94,8 @@ export default {
         ImageStyle,
         ImageUpload,
         Autosave,
-        Emptyness
+        Emptyness,
+        MediaEmbed
       ],
       toolbar: ['heading2', 'heading3', 'blockQuote', 'bold', 'italic', 'link'],
       autosave: {
@@ -119,6 +128,115 @@ export default {
           'full',
           { name: 'alignLeft', title: '左寄せ画像' },
           { name: 'alignRight', title: '右寄せ画像' }
+        ]
+      },
+      mediaEmbed: {
+        previewsInData: false,
+        providers: [
+          {
+            name: 'twitter',
+            url: /^twitter\.com/,
+            html: (match) => {
+              const path = match['input']
+              const isTweet = path.split('/')[2] === 'status'
+              const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${
+                this.iframelyApiKey
+              }&url=${encodeURIComponent(path)}`
+              if (isTweet) {
+                return `<div class="iframely-embed">
+                     <div class="iframely-responsive">
+                       <iframe src="${iframeUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+                       </iframe>
+                     </div>
+                   </div>`
+              }
+              const userName = path.split('/')[1]
+              return `<div class="iframe-twitter">
+                   <iframe src="https://${this.domain}/media_embed/twitter_profile/${userName}"
+                   frameborder="0" allow="autoplay; encrypted-media" allowfullscreen class="twitter-content-area">
+                   </iframe>
+                 </div>`
+            }
+          },
+          {
+            name: 'facebook',
+            url: /^facebook\.com/,
+            html: (match) => {
+              const path = 'https://' + match['input']
+              const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${
+                this.iframelyApiKey
+              }&url=${encodeURIComponent(path)}`
+              return `<div class="iframely-embed">
+                   <div class="iframely-responsive">
+                     <iframe src="${iframeUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+                     </iframe>
+                   </div>
+                 </div>`
+            }
+          },
+          {
+            name: 'youtube',
+            url: [
+              /^youtube\.com\/watch\?v=([\w-]+)/,
+              /^youtube\.com\/v\/([\w-]+)/,
+              /^youtube\.com\/embed\/([\w-]+)/,
+              /^youtu\.be\/([\w-]+)/
+            ],
+            html: (match) => {
+              const id = match[1]
+              return `<div class="iframe-youtube">
+                   <iframe src="https://www.youtube.com/embed/${id}" class="youtube-content-area"
+                   frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+                   </iframe>
+                 </div>`
+            }
+          },
+          {
+            name: 'gist',
+            url: /^gist\.github\.com/,
+            html: (match) => {
+              const path = 'https://' + match['input']
+              const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${
+                this.iframelyApiKey
+              }&url=${encodeURIComponent(path)}`
+              return `<div class="iframely-embed">
+                   <div class="iframely-responsive">
+                     <iframe src="${iframeUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+                     </iframe>
+                   </div>
+                 </div>`
+            }
+          },
+          {
+            name: 'instagram',
+            url: /^www\.instagram\.com\/p\/(\w+)/,
+            html: (match) => {
+              const path = 'https://' + match['input']
+              const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${
+                this.iframelyApiKey
+              }&url=${encodeURIComponent(path)}`
+              return `<div class="iframely-embed">
+                   <div class="iframely-responsive">
+                     <iframe src="${iframeUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+                     </iframe>
+                   </div>
+                 </div>`
+            }
+          },
+          {
+            name: 'any',
+            url: /.+/,
+            html: (match) => {
+              const path = match[0]
+              return `<div class="iframe-any">
+                   <iframe src="https://${this.domain}/media_embed/any?url=${encodeURIComponent(
+                path
+              )}"
+                   frameborder="0" allow="autoplay; encrypted-media" allowfullscreen class="any-content-area">
+                   </iframe>
+                 </div>`
+            }
+          }
         ]
       }
     }).then((editor) => {
@@ -155,4 +273,43 @@ export default {
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.iframe-twitter {
+  position: relative;
+  padding-bottom: 120px;
+
+  .twitter-content-area {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+}
+.iframe-any {
+  position: relative;
+  padding-bottom: 140px;
+
+  .any-content-area {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+}
+
+.iframe-youtube {
+  position: relative;
+  padding-bottom: 100%;
+  height: 0;
+  padding-bottom: 56.2493%;
+  .youtube-content-area {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+}
+</style>
