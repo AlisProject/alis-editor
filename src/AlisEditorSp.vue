@@ -117,46 +117,49 @@ export default {
           {
             name: 'twitter',
             url: /^twitter\.com/,
-            html: match => {
+            html: (match) => {
               const path = match['input']
               const isTweet = path.split('/')[2] === 'status'
-              const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${this.iframelyApiKey}&url=${encodeURIComponent(path)}`
+              const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${
+                this.iframelyApiKey
+              }&url=${encodeURIComponent(path)}`
               if (isTweet) {
                 return (
-                  '<div class="iframely-embed">' +
-                  '<div class="iframely-responsive">' +
-                  `<iframe src="${ iframeUrl }" ` +
-                  'frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>' +
-                  '</iframe>' +
-                  '</div>' +
-                  '</div>'
+                  `<div class="iframely-embed">
+                     <div class="iframely-responsive">
+                       <iframe src="${iframeUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+                       </iframe>
+                     </div>
+                   </div>`
                 )
               }
               const userName = path.split('/')[1]
               return (
-                '<div class="iframe-twitter">' +
-                `<iframe src="https://${this.domain}/media_embed/twitter_profile/${userName}" +
-                frameborder="0" allow="autoplay; encrypted-media" allowfullscreen +
-                class="twitter-content-area">` +
-                '</iframe>' +
-                '</div>'
+                `<div class="iframe-twitter">
+                   <iframe src="https://${this.domain}/media_embed/twitter_profile/${userName}"
+                   frameborder="0" allow="autoplay; encrypted-media" allowfullscreen
+                   class="twitter-content-area">
+                   </iframe>
+                 </div>`
               )
             }
           },
           {
             name: 'facebook',
             url: /^facebook\.com/,
-            html: match => {
-              const path = 'https://' + match['input'];
-              const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${this.iframelyApiKey}&url=${encodeURIComponent(path)}`
+            html: (match) => {
+              const path = 'https://' + match['input']
+              const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${
+                this.iframelyApiKey
+              }&url=${encodeURIComponent(path)}`
               return (
-                '<div class="iframely-embed">' +
-                '<div class="iframely-responsive">' +
-                `<iframe src="${ iframeUrl }" ` +
-                'frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>' +
-                '</iframe>' +
-                '</div>' +
-                '</div>'
+                `<div class="iframely-embed">
+                   <div class="iframely-responsive">
+                     <iframe src="${iframeUrl}"
+                     frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+                     </iframe>
+                   </div>
+                 </div>`
               )
             }
           },
@@ -168,64 +171,65 @@ export default {
               /^youtube\.com\/embed\/([\w-]+)/,
               /^youtu\.be\/([\w-]+)/
             ],
-            html: match => {
-              const id = match[ 1 ];
+            html: (match) => {
+              const id = match[1]
               return (
-                '<div class="iframe-youtube">' +
-                `<iframe src="https://www.youtube.com/embed/${ id }" ` +
-                'class="youtube-content-area" ' +
-                'frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>' +
-                '</iframe>' +
-                '</div>'
+                `<div class="iframe-youtube">
+                   <iframe src="https://www.youtube.com/embed/${id}"
+                   class="youtube-content-area"
+                   frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+                   </iframe>
+                 </div>`
               )
             }
           },
           {
             name: 'gist',
             url: /^gist\.github\.com/,
-            html: match => {
+            html: (match) => {
               const path = 'https://' + match['input']
-              const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${this.iframelyApiKey}&url=${encodeURIComponent(path)}`
+              const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${
+                this.iframelyApiKey
+              }&url=${encodeURIComponent(path)}`
               return (
-                '<div class="iframely-embed">' +
-                '<div class="iframely-responsive">' +
-                `<iframe src="${ iframeUrl }" ` +
-                'frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>' +
-                '</iframe>' +
-                '</div>' +
-                '</div>'
-              );
+                `<div class="iframely-embed">
+                   <div class="iframely-responsive">
+                     <iframe src="${iframeUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+                     </iframe>
+                   </div>
+                 </div>`
+              )
             }
           },
           {
             name: 'instagram',
             url: /^www\.instagram\.com\/p\/(\w+)/,
-            html: match => {
+            html: (match) => {
               const path = 'https://' + match['input']
-              const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${this.iframelyApiKey}&url=${encodeURIComponent(path)}`
+              const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${
+                this.iframelyApiKey
+              }&url=${encodeURIComponent(path)}`
               return (
-                '<div class="iframely-embed">' +
-                '<div class="iframely-responsive">' +
-                `<iframe src="${ iframeUrl }" ` +
-                'frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>' +
-                '</iframe>' +
-                '</div>' +
-                '</div>'
+                `<div class="iframely-embed">
+                   <div class="iframely-responsive">
+                     <iframe src="${iframeUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+                     </iframe>
+                   </div>
+                 </div>`
               )
             }
           },
           {
             name: 'any',
             url: /.+/,
-            html: match => {
+            html: (match) => {
               const path = match[0]
               return (
-                '<div class="iframe-any">' +
-                `<iframe src="https://${this.domain}/media_embed/any?url=${encodeURIComponent(path)}" +
-                frameborder="0" allow="autoplay; encrypted-media" allowfullscreen +
-                class="any-content-area">` +
-                '</iframe>' +
-                '</div>'
+                `<div class="iframe-any">
+                   <iframe src="https://${this.domain}/media_embed/any?url=${encodeURIComponent(path)}"
+                   frameborder="0" allow="autoplay; encrypted-media" allowfullscreen class="any-content-area">
+                   </iframe>
+                 </div>`
               )
             }
           }
