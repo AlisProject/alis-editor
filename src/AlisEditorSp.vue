@@ -27,8 +27,7 @@ import saveData from '@/utils/Save'
 import iconHeading2 from '@/assets/icons/heading2.svg'
 import iconHeading3 from '@/assets/icons/heading3.svg'
 import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed'
-
-const IFRAME_SRC = '//cdn.iframe.ly/api/iframe'
+import { IFRAMELY_API_ENDPOINT } from '@/utils/constant'
 
 export default {
   props: {
@@ -45,7 +44,7 @@ export default {
       type: String,
       default: null
     },
-    iframeKey: {
+    iframelyApiKey: {
       type: String
     },
     domain: {
@@ -119,13 +118,9 @@ export default {
             name: 'twitter',
             url: /^twitter\.com/,
             html: match => {
-              const url = match['input']
-              const urlArr = url.split('/')
-              let isTweet = false
-              if (urlArr[2] === 'status') {
-                isTweet = true
-              }
-              const iframeUrl = IFRAME_SRC + '?app=1&api_key=' + this.iframeKey + '&url=' + encodeURIComponent(url);
+              const path = match['input']
+              const isTweet = path.split('/')[2] === 'status'
+              const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${this.iframelyApiKey}&url=${encodeURIComponent(path)}`
               if (isTweet) {
                 return (
                   '<div class="iframely-embed">' +
@@ -137,7 +132,7 @@ export default {
                   '</div>'
                 )
               }
-              const userName = urlArr[1]
+              const userName = path.split('/')[1]
               return (
                 '<div class="iframe-twitter">' +
                 `<iframe src="https://${this.domain}/media_embed/twitter_profile/${userName}" +
@@ -152,8 +147,8 @@ export default {
             name: 'facebook',
             url: /^facebook\.com/,
             html: match => {
-              const url = 'https://' + match['input'];
-              const iframeUrl = IFRAME_SRC + '?app=1&api_key=' + this.iframeKey + '&url=' + encodeURIComponent(url);
+              const path = 'https://' + match['input'];
+              const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${this.iframelyApiKey}&url=${encodeURIComponent(path)}`
               return (
                 '<div class="iframely-embed">' +
                 '<div class="iframely-responsive">' +
@@ -189,8 +184,8 @@ export default {
             name: 'gist',
             url: /^gist\.github\.com/,
             html: match => {
-              const url = 'https://' + match['input'];
-              const iframeUrl = IFRAME_SRC + '?app=1&api_key=' + this.iframeKey + '&url=' + encodeURIComponent(url);
+              const path = 'https://' + match['input']
+              const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${this.iframelyApiKey}&url=${encodeURIComponent(path)}`
               return (
                 '<div class="iframely-embed">' +
                 '<div class="iframely-responsive">' +
@@ -206,8 +201,8 @@ export default {
             name: 'instagram',
             url: /^www\.instagram\.com\/p\/(\w+)/,
             html: match => {
-              const url = 'https://' + match['input'];
-              const iframeUrl = IFRAME_SRC + '?app=1&api_key=' + this.iframeKey + '&url=' + encodeURIComponent(url);
+              const path = 'https://' + match['input']
+              const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${this.iframelyApiKey}&url=${encodeURIComponent(path)}`
               return (
                 '<div class="iframely-embed">' +
                 '<div class="iframely-responsive">' +
@@ -223,10 +218,10 @@ export default {
             name: 'any',
             url: /.+/,
             html: match => {
-              const url = match[0]
+              const path = match[0]
               return (
                 '<div class="iframe-any">' +
-                `<iframe src="https://${this.domain}/media_embed/any?url=${encodeURIComponent(url)}" +
+                `<iframe src="https://${this.domain}/media_embed/any?url=${encodeURIComponent(path)}" +
                 frameborder="0" allow="autoplay; encrypted-media" allowfullscreen +
                 class="any-content-area">` +
                 '</iframe>' +
