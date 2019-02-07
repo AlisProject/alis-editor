@@ -21,6 +21,7 @@ import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar'
 import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption'
 import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle'
 import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload'
+import Emptyness from 'ckeditor5-emptyness/src/emptyness'
 import { isIOS } from '@/utils/device'
 import saveData from '@/utils/Save'
 import iconHeading2 from '@/assets/icons/heading2.svg'
@@ -65,7 +66,8 @@ export default {
         ImageCaption,
         ImageStyle,
         ImageUpload,
-        Autosave
+        Autosave,
+        Emptyness
       ],
       toolbar: ['heading2', 'heading3', 'blockQuote', 'bold', 'italic', 'link', 'imageUpload'],
       autosave: {
@@ -76,8 +78,20 @@ export default {
       heading: {
         options: [
           { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-          { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2', icon: iconHeading2 },
-          { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3', icon: iconHeading3 }
+          {
+            model: 'heading2',
+            view: 'h2',
+            title: 'Heading 2',
+            class: 'ck-heading_heading2',
+            icon: iconHeading2
+          },
+          {
+            model: 'heading3',
+            view: 'h3',
+            title: 'Heading 3',
+            class: 'ck-heading_heading3',
+            icon: iconHeading3
+          }
         ]
       },
       image: {
