@@ -124,24 +124,19 @@ export default {
                 this.iframelyApiKey
               }&url=${encodeURIComponent(path)}`
               if (isTweet) {
-                return (
-                  `<div class="iframely-embed">
+                return `<div class="iframely-embed">
                      <div class="iframely-responsive">
                        <iframe src="${iframeUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
                        </iframe>
                      </div>
                    </div>`
-                )
               }
               const userName = path.split('/')[1]
-              return (
-                `<div class="iframe-twitter">
+              return `<div class="iframe-twitter">
                    <iframe src="https://${this.domain}/media_embed/twitter_profile/${userName}"
-                   frameborder="0" allow="autoplay; encrypted-media" allowfullscreen
-                   class="twitter-content-area">
+                   frameborder="0" allow="autoplay; encrypted-media" allowfullscreen class="twitter-content-area">
                    </iframe>
                  </div>`
-              )
             }
           },
           {
@@ -152,15 +147,12 @@ export default {
               const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${
                 this.iframelyApiKey
               }&url=${encodeURIComponent(path)}`
-              return (
-                `<div class="iframely-embed">
+              return `<div class="iframely-embed">
                    <div class="iframely-responsive">
-                     <iframe src="${iframeUrl}"
-                     frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+                     <iframe src="${iframeUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
                      </iframe>
                    </div>
                  </div>`
-              )
             }
           },
           {
@@ -173,14 +165,11 @@ export default {
             ],
             html: (match) => {
               const id = match[1]
-              return (
-                `<div class="iframe-youtube">
-                   <iframe src="https://www.youtube.com/embed/${id}"
-                   class="youtube-content-area"
+              return `<div class="iframe-youtube">
+                   <iframe src="https://www.youtube.com/embed/${id}" class="youtube-content-area"
                    frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
                    </iframe>
                  </div>`
-              )
             }
           },
           {
@@ -191,14 +180,12 @@ export default {
               const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${
                 this.iframelyApiKey
               }&url=${encodeURIComponent(path)}`
-              return (
-                `<div class="iframely-embed">
+              return `<div class="iframely-embed">
                    <div class="iframely-responsive">
                      <iframe src="${iframeUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
                      </iframe>
                    </div>
                  </div>`
-              )
             }
           },
           {
@@ -209,14 +196,12 @@ export default {
               const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${
                 this.iframelyApiKey
               }&url=${encodeURIComponent(path)}`
-              return (
-                `<div class="iframely-embed">
+              return `<div class="iframely-embed">
                    <div class="iframely-responsive">
                      <iframe src="${iframeUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
                      </iframe>
                    </div>
                  </div>`
-              )
             }
           },
           {
@@ -224,13 +209,13 @@ export default {
             url: /.+/,
             html: (match) => {
               const path = match[0]
-              return (
-                `<div class="iframe-any">
-                   <iframe src="https://${this.domain}/media_embed/any?url=${encodeURIComponent(path)}"
+              return `<div class="iframe-any">
+                   <iframe src="https://${this.domain}/media_embed/any?url=${encodeURIComponent(
+                path
+              )}"
                    frameborder="0" allow="autoplay; encrypted-media" allowfullscreen class="any-content-area">
                    </iframe>
                  </div>`
-              )
             }
           }
         ]
