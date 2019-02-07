@@ -12,6 +12,12 @@ export default class CustomUploadAdapter {
   async upload() {
     const file = this.loader.file
     const imageExtension = file.type.split('image/')[1].toLowerCase()
+    const allowedExtensions = ['jpeg', 'jpg', 'png', 'gif']
+    if (!allowedExtensions.includes(imageExtension)) {
+      return Promise.reject(
+        `画像は以下のフォーマットのみアップロード可能です：${allowedExtensions}`
+      )
+    }
     await this.getUserSession()
     const currentUser = localStorage.getItem(
       `CognitoIdentityServiceProvider.${this.clientId}.LastAuthUser`
