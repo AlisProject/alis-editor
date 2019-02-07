@@ -31,6 +31,7 @@ import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload'
 import InsertButton from './components/InsertButton'
 import CustomUploadAdapterPlugin from '@/plugins/CustomUploadAdapterPlugin'
 import Autosave from '@ckeditor/ckeditor5-autosave/src/autosave'
+import Emptyness from 'ckeditor5-emptyness/src/emptyness'
 import saveData from '@/utils/Save'
 import iconHeading2 from '@/assets/icons/heading2.svg'
 import iconHeading3 from '@/assets/icons/heading3.svg'
@@ -84,7 +85,8 @@ export default {
         ImageCaption,
         ImageStyle,
         ImageUpload,
-        Autosave
+        Autosave,
+        Emptyness
       ],
       toolbar: ['heading2', 'heading3', 'blockQuote', 'bold', 'italic', 'link'],
       autosave: {
@@ -95,8 +97,20 @@ export default {
       heading: {
         options: [
           { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-          { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2', icon: iconHeading2 },
-          { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3', icon: iconHeading3 }
+          {
+            model: 'heading2',
+            view: 'h2',
+            title: 'Heading 2',
+            class: 'ck-heading_heading2',
+            icon: iconHeading2
+          },
+          {
+            model: 'heading3',
+            view: 'h3',
+            title: 'Heading 3',
+            class: 'ck-heading_heading3',
+            icon: iconHeading3
+          }
         ]
       },
       image: {
