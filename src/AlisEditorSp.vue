@@ -287,7 +287,7 @@ export default {
 <style lang="scss">
 .iframe-twitter {
   position: relative;
-  padding-bottom: 120px;
+  padding-bottom: 140px;
 
   .twitter-content-area {
     position: absolute;
