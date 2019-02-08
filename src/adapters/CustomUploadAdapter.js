@@ -30,7 +30,7 @@ export default class CustomUploadAdapter {
       if (imageExtension === 'gif') {
         try {
           if (file.size > MAX_UPLOAD) {
-            throw new Error('画像は10MBまでアップロード可能です')
+            throw new Error('画像は7MBまでアップロード可能です')
           }
           const config = this.getConfig(token, file.size, imageExtension)
           const responseData = await this.uploadImage(this.articleId, file, config)
@@ -52,7 +52,7 @@ export default class CustomUploadAdapter {
               const config = this.getConfig(token, uploadFile.size, imageExtension)
               try {
                 if (uploadFile.size > MAX_UPLOAD) {
-                  throw new Error('画像は10MBまでアップロード可能です')
+                  throw new Error('画像は7MBまでアップロード可能です')
                 }
                 const responseData = await this.uploadImage(this.articleId, uploadFile, config)
                 resolve(responseData)
