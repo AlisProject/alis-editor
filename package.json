@@ -6,7 +6,12 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --target lib --name AlisEditor src/index.js",
     "lint": "vue-cli-service lint",
-    "format": "prettier-eslint --write \"./**/*.{js,vue}\" --ignore \"./node_modules/**\" "
+    "format": "prettier-eslint --write \"./**/*.{js,vue}\" --ignore \"./node_modules/**\" ",
+    "release:prebuild": "yarn build",
+    "release:postbuild": "git push --follow-tags origin master && npm publish",
+    "release:major": "yarn release:prebuild; yarn standard-version --release-as major; yarn release:postbuild",
+    "release:minor": "yarn release:prebuild; yarn standard-version --release-as minor; yarn release:postbuild",
+    "release:patch": "yarn release:prebuild; yarn standard-version; yarn release:postbuild"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-autosave": "^10.0.2",
@@ -42,6 +47,10 @@
     "prettier-eslint-cli": "^4.7.1",
     "raw-loader": "^0.5.1",
     "sass-loader": "^7.0.1",
+    "standard-version": "^4.4.0",
     "vue-template-compiler": "^2.5.21"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
   }
 }
