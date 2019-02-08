@@ -26,7 +26,7 @@ module.exports = {
   chainWebpack: (config) => {
     config.module
       .rule('svg')
-      .test(/ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/)
+      .test(/.svg$/)
       .use('file-loader')
       .loader('raw-loader')
   }

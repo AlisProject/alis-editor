@@ -1,2 +1,3 @@
 import AlisEditorPc from './AlisEditorPc.vue'
-export { AlisEditorPc }
+import AlisEditorSp from './AlisEditorSp.vue'
+export { AlisEditorPc, AlisEditorSp }

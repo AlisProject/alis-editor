@@ -2,21 +2,34 @@
   "name": "@alisproject/alis-editor",
   "version": "0.1.0",
   "main": "dist/AlisEditor.common.js",
+  "license": "GPL-3.0",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --target lib --name AlisEditor src/index.js",
     "lint": "vue-cli-service lint",
-    "format": "prettier-eslint --write \"./**/*.{js,vue}\" --ignore \"./node_modules/**\" "
+    "format": "prettier-eslint --write \"./**/*.{js,vue}\" --ignore \"./node_modules/**\" ",
+    "release:prebuild": "yarn build",
+    "release:postbuild": "git push --follow-tags origin master && npm publish",
+    "release:major": "yarn release:prebuild; yarn standard-version --release-as major; yarn release:postbuild",
+    "release:minor": "yarn release:prebuild; yarn standard-version --release-as minor; yarn release:postbuild",
+    "release:patch": "yarn release:prebuild; yarn standard-version; yarn release:postbuild"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-autosave": "^10.0.2",
     "@ckeditor/ckeditor5-basic-styles": "^10.1.0",
     "@ckeditor/ckeditor5-block-quote": "^10.1.1",
     "@ckeditor/ckeditor5-editor-balloon": "^11.0.2",
+    "@ckeditor/ckeditor5-editor-classic": "^11.0.2",
     "@ckeditor/ckeditor5-essentials": "^10.1.3",
     "@ckeditor/ckeditor5-heading": "^10.1.1",
+    "@ckeditor/ckeditor5-image": "^12.0.0",
     "@ckeditor/ckeditor5-link": "^10.1.0",
+    "@ckeditor/ckeditor5-media-embed": "^10.1.0",
     "@ckeditor/ckeditor5-paragraph": "^10.0.4",
     "@ckeditor/ckeditor5-theme-lark": "^12.0.0",
+    "axios": "^0.18.0",
+    "blueimp-load-image": "^2.20.1",
+    "ckeditor5-emptyness": "https://github.com/alexeckermann/ckeditor5-emptyness",
     "vue": "^2.5.21"
   },
   "devDependencies": {
@@ -35,6 +48,10 @@
     "prettier-eslint-cli": "^4.7.1",
     "raw-loader": "^0.5.1",
     "sass-loader": "^7.0.1",
+    "standard-version": "^4.4.0",
     "vue-template-compiler": "^2.5.21"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
   }
 }
