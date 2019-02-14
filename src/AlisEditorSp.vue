@@ -264,7 +264,7 @@ export default {
   },
   methods: {
     changeToolbarButtonState(editor) {
-      editor.model.document.on('change:data', () => {
+      editor.model.document.on('change', () => {
         const isComposing = editor.editing.view.document.isComposing
         toolbar.forEach((buttonItem) => {
           if (buttonItem.startsWith('heading')) buttonItem = 'heading'
