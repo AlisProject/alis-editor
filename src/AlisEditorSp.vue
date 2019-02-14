@@ -29,6 +29,8 @@ import iconHeading3 from '@/assets/icons/heading3.svg'
 import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed'
 import { IFRAMELY_API_ENDPOINT } from '@/utils/constant'
 
+const toolbar = ['heading2', 'heading3', 'blockQuote', 'bold', 'italic', 'link', 'imageUpload']
+
 export default {
   props: {
     articleId: {
@@ -53,7 +55,9 @@ export default {
   },
   data() {
     return {
-      editor: null
+      editor: null,
+      beforeIsComposing: false,
+      changeToolbarButtonStateInterval: null
     }
   },
   mounted() {
@@ -78,7 +82,7 @@ export default {
         Emptyness,
         MediaEmbed
       ],
-      toolbar: ['heading2', 'heading3', 'blockQuote', 'bold', 'italic', 'link', 'imageUpload'],
+      toolbar,
       autosave: {
         save(editor) {
           return saveData(editor.getData(), articleId, clientId, functions)
@@ -232,7 +236,19 @@ export default {
         checkIfShouldBeSticky()
       }
 
-      this.modifyEnterMode(editor)
+      this.changeToolbarButtonStateInterval = setInterval(() => {
+        const isComposing = editor.editing.view.document.isComposing
+        if (this.beforeIsComposing === isComposing) return
+        if (!isComposing) {
+          toolbar.forEach((buttonItem) => {
+            if (buttonItem.startsWith('heading')) buttonItem = 'heading'
+            editor.commands.get(buttonItem).isEnabled = true
+          })
+        }
+        this.beforeIsComposing = isComposing
+      }, 300)
+
+      this.changeToolbarButtonState(editor)
       this.editor = editor
       if (this.editorContent !== null) {
         editor.setData(this.editorContent)
@@ -240,7 +256,19 @@ export default {
       this.$emit('editor-mounted')
     })
   },
+  beforeDestroy() {
+    clearInterval(this.changeToolbarButtonStateInterval)
+  },
   methods: {
+    changeToolbarButtonState(editor) {
+      editor.model.document.on('change:data', () => {
+        const isComposing = editor.editing.view.document.isComposing
+        toolbar.forEach((buttonItem) => {
+          if (buttonItem.startsWith('heading')) buttonItem = 'heading'
+          editor.commands.get(buttonItem).isEnabled = !isComposing
+        })
+      })
+    },
     /**
      * Enter が押された場合、shiftEnter の処理を実行する。
      * ただし、Enter が２回続けて押された場合は、通常通り Enter の処理を実行する（当処理では何もしない）
