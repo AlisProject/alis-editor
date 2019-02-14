@@ -233,6 +233,7 @@ export default {
       }
 
       this.modifyEnterMode(editor)
+      if (iOS()) this.modifyBackspaceMode(editor)
       this.editor = editor
       if (this.editorContent !== null) {
         editor.setData(this.editorContent)
@@ -241,6 +242,19 @@ export default {
     })
   },
   methods: {
+    modifyBackspaceMode(editor) {
+      editor.editing.view.document.on(
+        'keydown',
+        (evt) => {
+          // iOS では IME での入力中（isComposing が true の状態）に Backspace を押すと
+          // エラーになるため、イベントを止めている。
+          if (data.keyCode == 8 && editor.editing.view.document.isComposing) {
+            evt.stop()
+          }
+        },
+        { priority: 'high' }
+      )
+    },
     /**
      * Enter が押された場合、shiftEnter の処理を実行する。
      * ただし、Enter が２回続けて押された場合は、通常通り Enter の処理を実行する（当処理では何もしない）
