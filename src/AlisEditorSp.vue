@@ -236,19 +236,20 @@ export default {
         checkIfShouldBeSticky()
       }
 
-      this.changeToolbarButtonStateInterval = setInterval(() => {
-        const isComposing = editor.editing.view.document.isComposing
-        if (this.beforeIsComposing === isComposing) return
-        if (!isComposing) {
-          toolbar.forEach((buttonItem) => {
-            if (buttonItem.startsWith('heading')) buttonItem = 'heading'
-            editor.commands.get(buttonItem).isEnabled = true
-          })
-        }
-        this.beforeIsComposing = isComposing
-      }, 300)
-
-      this.changeToolbarButtonState(editor)
+      if (isIOS()) {
+        this.changeToolbarButtonStateInterval = setInterval(() => {
+          const isComposing = editor.editing.view.document.isComposing
+          if (this.beforeIsComposing === isComposing) return
+          if (!isComposing) {
+            toolbar.forEach((buttonItem) => {
+              if (buttonItem.startsWith('heading')) buttonItem = 'heading'
+              editor.commands.get(buttonItem).isEnabled = true
+            })
+          }
+          this.beforeIsComposing = isComposing
+        }, 300)
+        this.changeToolbarButtonState(editor)
+      }
       this.editor = editor
       if (this.editorContent !== null) {
         editor.setData(this.editorContent)
@@ -257,7 +258,9 @@ export default {
     })
   },
   beforeDestroy() {
-    clearInterval(this.changeToolbarButtonStateInterval)
+    if (isIOS()) {
+      clearInterval(this.changeToolbarButtonStateInterval)
+    }
   },
   methods: {
     changeToolbarButtonState(editor) {
