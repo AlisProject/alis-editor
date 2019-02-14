@@ -233,7 +233,7 @@ export default {
       }
 
       this.modifyEnterMode(editor)
-      if (iOS()) this.modifyBackspaceMode(editor)
+      if (isIOS()) this.modifyBackspaceMode(editor)
       this.editor = editor
       if (this.editorContent !== null) {
         editor.setData(this.editorContent)
@@ -245,7 +245,7 @@ export default {
     modifyBackspaceMode(editor) {
       editor.editing.view.document.on(
         'keydown',
-        (evt) => {
+        (evt, data) => {
           // iOS では IME での入力中（isComposing が true の状態）に Backspace を押すと
           // エラーになるため、イベントを止めている。
           if (data.keyCode == 8 && editor.editing.view.document.isComposing) {
