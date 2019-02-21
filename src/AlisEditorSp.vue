@@ -29,8 +29,6 @@ import iconHeading3 from '@/assets/icons/heading3.svg'
 import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed'
 import { IFRAMELY_API_ENDPOINT } from '@/utils/constant'
 
-const toolbar = ['heading2', 'heading3', 'blockQuote', 'bold', 'italic', 'link', 'imageUpload']
-
 export default {
   props: {
     articleId: {
@@ -57,7 +55,8 @@ export default {
     return {
       editor: null,
       beforeIsComposing: false,
-      changeToolbarButtonStateInterval: null
+      changeToolbarButtonStateInterval: null,
+      toolbar: ['heading2', 'heading3', 'blockQuote', 'bold', 'italic', 'link', 'imageUpload']
     }
   },
   mounted() {
@@ -82,7 +81,7 @@ export default {
         Emptyness,
         MediaEmbed
       ],
-      toolbar,
+      toolbar: this.toolbar,
       autosave: {
         save(editor) {
           return saveData(editor.getData(), articleId, clientId, functions)
@@ -242,14 +241,11 @@ export default {
           const isComposing = editor.editing.view.document.isComposing
           if (this.beforeIsComposing === isComposing) return
           if (!isComposing) {
-            toolbar.forEach((buttonItem) => {
-              if (buttonItem.startsWith('heading')) buttonItem = 'heading'
-              editor.commands.get(buttonItem).isEnabled = true
-            })
+            this.changeToolbarButtonState(editor, this.toolbar, true)
           }
           this.beforeIsComposing = isComposing
         }, 300)
-        this.changeToolbarButtonState(editor)
+        this.handleChangeToolbarButtonState(editor, this.toolbar)
       }
       this.editor = editor
       if (this.editorContent !== null) {
@@ -277,13 +273,16 @@ export default {
         { priority: 'high' }
       )
     },
-    changeToolbarButtonState(editor) {
+    handleChangeToolbarButtonState(editor, toolbar) {
       editor.model.document.on('change', () => {
         const isComposing = editor.editing.view.document.isComposing
-        toolbar.forEach((buttonItem) => {
-          if (buttonItem.startsWith('heading')) buttonItem = 'heading'
-          editor.commands.get(buttonItem).isEnabled = !isComposing
-        })
+        this.changeToolbarButtonState(editor, toolbar, !isComposing)
+      })
+    },
+    changeToolbarButtonState(editor, toolbar, isEnabled) {
+      toolbar.forEach((buttonItem) => {
+        if (buttonItem.startsWith('heading')) buttonItem = 'heading'
+        this.editor.commands.get(buttonItem).isEnabled = isEnabled
       })
     }
   }
