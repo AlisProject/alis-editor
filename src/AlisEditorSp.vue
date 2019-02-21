@@ -94,14 +94,14 @@ export default {
           {
             model: 'heading2',
             view: 'h2',
-            title: 'Heading 2',
+            title: 'Heading 1',
             class: 'ck-heading_heading2',
             icon: iconHeading2
           },
           {
             model: 'heading3',
             view: 'h3',
-            title: 'Heading 3',
+            title: 'Heading 2',
             class: 'ck-heading_heading3',
             icon: iconHeading3
           }
