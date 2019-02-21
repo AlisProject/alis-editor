@@ -1,7 +1,7 @@
 export default function saveData(body, articleId, clientId, functions) {
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve) => {
     functions.setIsSaving({ isSaving: true })
-    functions.setIsEdited({ isEdited: true })
+    functions.setIsEditedBody({ isEditedBody: true })
     functions.setSaveStatus({ saveStatus: '保存中' })
     try {
       // Update body
@@ -14,12 +14,15 @@ export default function saveData(body, articleId, clientId, functions) {
 
       // Complete save
       functions.setSaveStatus({ saveStatus: '保存済み' })
-      functions.setIsSaving({ isSaving: false })
-      functions.setIsEdited({ isEdited: false })
-      resolve()
     } catch (error) {
-      functions.sendNotification({ text: '記事の更新に失敗しました', type: 'warning' })
-      reject(error)
+      functions.sendNotification({
+        text: '記事の更新に失敗しました。お手数ですが、しばらく時間を置いて再度お試しください',
+        type: 'warning'
+      })
+    } finally {
+      functions.setIsSaving({ isSaving: false })
+      functions.setIsEditedBody({ isEditedBody: false })
+      resolve()
     }
   })
 }
