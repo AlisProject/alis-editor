@@ -236,7 +236,9 @@ export default {
         checkIfShouldBeSticky()
       }
 
+      this.modifyEnterMode(editor)
       if (isIOS()) {
+        this.modifyBackspaceMode(editor)
         this.changeToolbarButtonStateInterval = setInterval(() => {
           const isComposing = editor.editing.view.document.isComposing
           if (this.beforeIsComposing === isComposing) return
@@ -263,6 +265,19 @@ export default {
     }
   },
   methods: {
+    modifyBackspaceMode(editor) {
+      editor.editing.view.document.on(
+        'keydown',
+        (evt, data) => {
+          // iOS では IME での入力中（isComposing が true の状態）に Backspace を押すと
+          // エラーになるため、イベントを止めている。
+          if (data.keyCode == 8 && editor.editing.view.document.isComposing) {
+            evt.stop()
+          }
+        },
+        { priority: 'high' }
+      )
+    },
     changeToolbarButtonState(editor) {
       editor.model.document.on('change', () => {
         const isComposing = editor.editing.view.document.isComposing
