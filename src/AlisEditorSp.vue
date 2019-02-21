@@ -29,6 +29,8 @@ import iconHeading3 from '@/assets/icons/heading3.svg'
 import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed'
 import { IFRAMELY_API_ENDPOINT } from '@/utils/constant'
 
+const toolbar = ['heading2', 'heading3', 'blockQuote', 'bold', 'italic', 'link', 'imageUpload']
+
 export default {
   props: {
     articleId: {
@@ -53,7 +55,9 @@ export default {
   },
   data() {
     return {
-      editor: null
+      editor: null,
+      beforeIsComposing: false,
+      changeToolbarButtonStateInterval: null
     }
   },
   mounted() {
@@ -78,7 +82,7 @@ export default {
         Emptyness,
         MediaEmbed
       ],
-      toolbar: ['heading2', 'heading3', 'blockQuote', 'bold', 'italic', 'link', 'imageUpload'],
+      toolbar,
       autosave: {
         save(editor) {
           return saveData(editor.getData(), articleId, clientId, functions)
@@ -232,6 +236,21 @@ export default {
         checkIfShouldBeSticky()
       }
 
+      if (isIOS()) {
+        this.modifyBackspaceMode(editor)
+        this.changeToolbarButtonStateInterval = setInterval(() => {
+          const isComposing = editor.editing.view.document.isComposing
+          if (this.beforeIsComposing === isComposing) return
+          if (!isComposing) {
+            toolbar.forEach((buttonItem) => {
+              if (buttonItem.startsWith('heading')) buttonItem = 'heading'
+              editor.commands.get(buttonItem).isEnabled = true
+            })
+          }
+          this.beforeIsComposing = isComposing
+        }, 300)
+        this.changeToolbarButtonState(editor)
+      }
       this.editor = editor
       if (this.editorContent !== null) {
         editor.setData(this.editorContent)
@@ -239,7 +258,35 @@ export default {
       this.$emit('editor-mounted')
     })
   },
-  methods: {}
+  beforeDestroy() {
+    if (isIOS()) {
+      clearInterval(this.changeToolbarButtonStateInterval)
+    }
+  },
+  methods: {
+    modifyBackspaceMode(editor) {
+      editor.editing.view.document.on(
+        'keydown',
+        (evt, data) => {
+          // iOS では IME での入力中（isComposing が true の状態）に Backspace を押すと
+          // エラーになるため、イベントを止めている。
+          if (data.keyCode == 8 && editor.editing.view.document.isComposing) {
+            evt.stop()
+          }
+        },
+        { priority: 'high' }
+      )
+    },
+    changeToolbarButtonState(editor) {
+      editor.model.document.on('change', () => {
+        const isComposing = editor.editing.view.document.isComposing
+        toolbar.forEach((buttonItem) => {
+          if (buttonItem.startsWith('heading')) buttonItem = 'heading'
+          editor.commands.get(buttonItem).isEnabled = !isComposing
+        })
+      })
+    }
+  }
 }
 </script>
 
