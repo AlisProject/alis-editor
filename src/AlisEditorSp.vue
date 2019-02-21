@@ -29,6 +29,8 @@ import iconHeading3 from '@/assets/icons/heading3.svg'
 import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed'
 import { IFRAMELY_API_ENDPOINT } from '@/utils/constant'
 
+const toolbar = ['heading2', 'heading3', 'blockQuote', 'bold', 'italic', 'link', 'imageUpload']
+
 export default {
   props: {
     articleId: {
@@ -53,7 +55,9 @@ export default {
   },
   data() {
     return {
-      editor: null
+      editor: null,
+      beforeIsComposing: false,
+      changeToolbarButtonStateInterval: null
     }
   },
   mounted() {
@@ -78,7 +82,7 @@ export default {
         Emptyness,
         MediaEmbed
       ],
-      toolbar: ['heading2', 'heading3', 'blockQuote', 'bold', 'italic', 'link', 'imageUpload'],
+      toolbar,
       autosave: {
         save(editor) {
           return saveData(editor.getData(), articleId, clientId, functions)
@@ -233,13 +237,32 @@ export default {
       }
 
       this.modifyEnterMode(editor)
-      if (isIOS()) this.modifyBackspaceMode(editor)
+      if (isIOS()) {
+        this.modifyBackspaceMode(editor)
+        this.changeToolbarButtonStateInterval = setInterval(() => {
+          const isComposing = editor.editing.view.document.isComposing
+          if (this.beforeIsComposing === isComposing) return
+          if (!isComposing) {
+            toolbar.forEach((buttonItem) => {
+              if (buttonItem.startsWith('heading')) buttonItem = 'heading'
+              editor.commands.get(buttonItem).isEnabled = true
+            })
+          }
+          this.beforeIsComposing = isComposing
+        }, 300)
+        this.changeToolbarButtonState(editor)
+      }
       this.editor = editor
       if (this.editorContent !== null) {
         editor.setData(this.editorContent)
       }
       this.$emit('editor-mounted')
     })
+  },
+  beforeDestroy() {
+    if (isIOS()) {
+      clearInterval(this.changeToolbarButtonStateInterval)
+    }
   },
   methods: {
     modifyBackspaceMode(editor) {
@@ -254,6 +277,15 @@ export default {
         },
         { priority: 'high' }
       )
+    },
+    changeToolbarButtonState(editor) {
+      editor.model.document.on('change', () => {
+        const isComposing = editor.editing.view.document.isComposing
+        toolbar.forEach((buttonItem) => {
+          if (buttonItem.startsWith('heading')) buttonItem = 'heading'
+          editor.commands.get(buttonItem).isEnabled = !isComposing
+        })
+      })
     },
     /**
      * Enter が押された場合、shiftEnter の処理を実行する。
