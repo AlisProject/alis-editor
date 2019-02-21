@@ -1,7 +1,7 @@
 export default function saveData(body, articleId, clientId, functions) {
   return new Promise(async (resolve) => {
     functions.setIsSaving({ isSaving: true })
-    functions.setIsEdited({ isEdited: true })
+    functions.setIsEditedBody({ isEditedBody: true })
     functions.setSaveStatus({ saveStatus: '保存中' })
     try {
       // Update body
@@ -21,7 +21,7 @@ export default function saveData(body, articleId, clientId, functions) {
       })
     } finally {
       functions.setIsSaving({ isSaving: false })
-      functions.setIsEdited({ isEdited: false })
+      functions.setIsEditedBody({ isEditedBody: false })
       resolve()
     }
   })
