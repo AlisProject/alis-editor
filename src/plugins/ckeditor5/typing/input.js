@@ -10,8 +10,8 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin'
 import InputCommand from './inputcommand'
 
-import injectUnsafeKeystrokesHandling from './utils/injectunsafekeystrokeshandling'
-import injectTypingMutationsHandling from './utils/injecttypingmutationshandling'
+import injectUnsafeKeystrokesHandling from '@ckeditor/ckeditor5-typing/src/utils/injectunsafekeystrokeshandling'
+import injectTypingMutationsHandling from '@ckeditor/ckeditor5-typing/src/utils/injecttypingmutationshandling'
 
 /**
  * Handles text input coming from the keyboard or other input methods.

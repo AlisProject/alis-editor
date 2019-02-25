@@ -8,8 +8,7 @@
  */
 
 import Command from '@ckeditor/ckeditor5-core/src/command'
-
-import ChangeBuffer from './utils/changebuffer'
+import ChangeBuffer from '@ckeditor/ckeditor5-typing/src/utils/changebuffer'
 
 /**
  * The input command. Used by the {@link module:typing/input~Input input feature} to handle typing.
@@ -87,7 +86,14 @@ export default class InputCommand extends Command {
       }
 
       if (text) {
-        writer.insertText(text, doc.selection.getAttributes(), range.start)
+        const targetSelection = window.getSelection()
+        // キャレットがリンク文字列の先頭もしくは末尾にある場合は、入力する文字に属性を付与しない
+        const attributeFlag =
+          doc.selection.hasAttribute('linkHref') &&
+          targetSelection &&
+          (targetSelection.anchorNode.length == 0 ||
+            targetSelection.anchorNode.length == targetSelection.anchorOffset)
+        writer.insertText(text, attributeFlag ? null : doc.selection.getAttributes(), range.start)
       }
 
       if (resultRange) {

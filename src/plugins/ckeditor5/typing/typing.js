@@ -9,7 +9,7 @@
 
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin'
 import Input from './input'
-import Delete from './delete'
+import Delete from '@ckeditor/ckeditor5-typing/src/delete'
 
 /**
  * The typing feature. It handles typing.

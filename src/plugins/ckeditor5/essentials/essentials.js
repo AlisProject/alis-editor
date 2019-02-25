@@ -12,7 +12,7 @@ import Plugin from '@ckeditor/ckeditor5-core/src/plugin'
 import Clipboard from '@ckeditor/ckeditor5-clipboard/src/clipboard'
 import Enter from '@ckeditor/ckeditor5-enter/src/enter'
 import ShiftEnter from '@ckeditor/ckeditor5-enter/src/shiftenter'
-import Typing from '@ckeditor/ckeditor5-typing/src/typing'
+import Typing from '@/plugins/ckeditor5/typing/typing'
 import Undo from '@ckeditor/ckeditor5-undo/src/undo'
 
 /**
