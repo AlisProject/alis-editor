@@ -36,7 +36,7 @@ import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed'
 import saveData from '@/utils/Save'
 import iconHeading2 from '@/assets/icons/heading2.svg'
 import iconHeading3 from '@/assets/icons/heading3.svg'
-import { IFRAMELY_API_ENDPOINT } from '@/utils/constant'
+import { IFRAMELY_API_ENDPOINT, VALIDATE_URL_REGEXP } from '@/utils/constant'
 
 export default {
   props: {
@@ -160,9 +160,16 @@ export default {
           },
           {
             name: 'facebook',
-            url: /^facebook\.com/,
+            url: [
+              /^https?:\/\/(?:www|m|business)\.facebook\.com\/(permalink|story)\.php\?[^/]+(\d{10,})/i,
+              /^https?:\/\/(?:www|m|business)\.facebook\.com\/photo\.php\?fbid=(\d{10,})/i,
+              /^https?:\/\/(?:www|m|business)\.facebook\.com\/([a-zA-Z0-9.-]+)\/(posts|activity)\/(\d{10,})/i,
+              /^https?:\/\/(?:www|m|business)\.facebook\.com\/([a-zA-Z0-9.-]+)\/photos\/[^/]+\/(\d{10,})/i,
+              /^https?:\/\/(?:www|m|business)\.facebook\.com\/notes\/([a-zA-Z0-9.-]+)\/[^/]+\/(\d{10,})/i,
+              /^https?:\/\/(?:www|m|business)\.facebook\.com\/media\/set\/\?set=[^/]+(\d{10,})/i
+            ],
             html: (match) => {
-              const path = 'https://' + match['input']
+              const path = match['input']
               const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${
                 this.iframelyApiKey
               }&url=${encodeURIComponent(path)}`
@@ -177,10 +184,13 @@ export default {
           {
             name: 'youtube',
             url: [
-              /^youtube\.com\/watch\?v=([\w-]+)/,
-              /^youtube\.com\/v\/([\w-]+)/,
-              /^youtube\.com\/embed\/([\w-]+)/,
-              /^youtu\.be\/([\w-]+)/
+              /^https?:\/\/(?:www\.)?youtube\.com\/(?:tv#\/)?watch\/?\?(?:[^&]+&)*v=([a-zA-Z0-9_-]+)/i,
+              /^https?:\/\/youtu.be\/([a-zA-Z0-9_-]+)/i,
+              /^https?:\/\/m\.youtube\.com\/#\/watch\?(?:[^&]+&)*v=([a-zA-Z0-9_-]+)/i,
+              /^https?:\/\/www\.youtube\.com\/embed\/([a-zA-Z0-9_-]+)/i,
+              /^https?:\/\/www\.youtube\.com\/v\/([a-zA-Z0-9_-]+)/i,
+              /^https?:\/\/www\.youtube\.com\/user\/[a-zA-Z0-9_-]+\/?\?v=([a-zA-Z0-9_-]+)/i,
+              /^https?:\/\/www\.youtube-nocookie\.com\/(?:v|embed)\/([a-zA-Z0-9_-]+)/i
             ],
             html: (match) => {
               const id = match[1]
@@ -209,9 +219,13 @@ export default {
           },
           {
             name: 'instagram',
-            url: /^www\.instagram\.com\/p\/(\w+)/,
+            url: [
+              /^https?:\/\/(?:www.)?instagram\.com\/(?:[a-zA-Z0-9_-]+\/)?(?:p|tv)\/([a-zA-Z0-9_-]+)\/?/i,
+              /^https?:\/\/instagr\.am\/(?:[a-zA-Z0-9_-]+\/)?p\/([a-zA-Z0-9_-]+)/i,
+              /^https?:\/\/instagram\.com\/(?:[a-zA-Z0-9_-]+\/)?(?:p|tv)\/([a-zA-Z0-9_-]+)$/i
+            ],
             html: (match) => {
-              const path = 'https://' + match['input']
+              const path = match['input']
               const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${
                 this.iframelyApiKey
               }&url=${encodeURIComponent(path)}`
@@ -225,16 +239,16 @@ export default {
           },
           {
             name: 'any',
-            url: /.+/,
+            url: VALIDATE_URL_REGEXP,
             html: (match) => {
               const path = match[0]
               return `<div class="iframe-any">
-                   <iframe src="https://${this.domain}/media_embed/any?url=${encodeURIComponent(
+                 <iframe src="https://${this.domain}/media_embed/any?url=${encodeURIComponent(
                 path
               )}"
-                   frameborder="0" allow="autoplay; encrypted-media" allowfullscreen class="any-content-area">
-                   </iframe>
-                 </div>`
+                 frameborder="0" allow="autoplay; encrypted-media" allowfullscreen class="any-content-area">
+                 </iframe>
+               </div>`
             }
           }
         ]
