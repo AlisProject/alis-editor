@@ -27,12 +27,9 @@ import saveData from '@/utils/Save'
 import iconHeading2 from '@/assets/icons/heading2.svg'
 import iconHeading3 from '@/assets/icons/heading3.svg'
 import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed'
-import { IFRAMELY_API_ENDPOINT } from '@/utils/constant'
 import sameNodes from '@/utils/sameNodes'
 import diff from '@ckeditor/ckeditor5-utils/src/diff'
 import { IFRAMELY_API_ENDPOINT, VALIDATE_URL_REGEXP } from '@/utils/constant'
-
-const toolbar = ['heading2', 'heading3', 'blockQuote', 'bold', 'italic', 'link', 'imageUpload']
 
 export default {
   props: {
