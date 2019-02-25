@@ -28,6 +28,8 @@ import iconHeading2 from '@/assets/icons/heading2.svg'
 import iconHeading3 from '@/assets/icons/heading3.svg'
 import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed'
 import { IFRAMELY_API_ENDPOINT } from '@/utils/constant'
+import sameNodes from '@/utils/sameNodes'
+import diff from '@ckeditor/ckeditor5-utils/src/diff'
 
 export default {
   props: {
@@ -234,7 +236,16 @@ export default {
         if (isIOS()) return
         checkIfShouldBeSticky()
       }
-
+      // iOS ではリンクの先頭・末尾で半角スペースを入力後に文字を入力するとエラーが発生してしまう。
+      // これは _diffNodeLists メソッドで利用している sameNodes 関数内の比較処理に問題があることが原因である。
+      // そのため、_diffNodeLists を書き換え、バグを修正した sameNodes 関数を呼び出している。
+      editor.editing.view._renderer._diffNodeLists = (actualDomChildren, expectedDomChildren) => {
+        return diff(
+          actualDomChildren,
+          expectedDomChildren,
+          sameNodes.bind(null, editor.editing.view._renderer.domConverter.blockFiller)
+        )
+      }
       if (isIOS()) {
         this.modifyBackspaceMode(editor)
         this.changeToolbarButtonStateInterval = setInterval(() => {
