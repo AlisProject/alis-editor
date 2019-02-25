@@ -251,6 +251,9 @@ export default {
       if (this.editorContent !== null) {
         editor.setData(this.editorContent)
       }
+      this.changeToolbarButtonState(editor, this.toolbar, false)
+      this.handleEditorFocus(editor)
+      this.handleEditorBlur(editor)
       this.$emit('editor-mounted')
     })
   },
@@ -272,6 +275,16 @@ export default {
         },
         { priority: 'high' }
       )
+    },
+    handleEditorFocus(editor) {
+      editor.editing.view.document.on('focus', () => {
+        this.changeToolbarButtonState(editor, this.toolbar, true)
+      })
+    },
+    handleEditorBlur(editor) {
+      editor.editing.view.document.on('blur', () => {
+        this.changeToolbarButtonState(editor, this.toolbar, false)
+      })
     },
     handleChangeToolbarButtonState(editor, toolbar) {
       editor.model.document.on('change', () => {
