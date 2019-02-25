@@ -265,6 +265,7 @@ export default {
       this.changeToolbarButtonState(editor, this.toolbar, false)
       this.handleEditorFocus(editor)
       this.handleEditorBlur(editor)
+      this.modifyBehaviorAfterInsertImage(editor)
       this.$emit('editor-mounted')
     })
   },
@@ -307,6 +308,23 @@ export default {
       toolbar.forEach((buttonItem) => {
         if (buttonItem.startsWith('heading')) buttonItem = 'heading'
         this.editor.commands.get(buttonItem).isEnabled = isEnabled
+      })
+    },
+    modifyBehaviorAfterInsertImage(editor) {
+      editor.model.document.on('change', (event, data) => {
+        const isInsertImage =
+          data.operations[2] &&
+          data.operations[2].nodes &&
+          data.operations[2].nodes._nodes[0].name === 'caption'
+        if (isInsertImage) {
+          editor.model.change((writer) => {
+            const insertPosition = editor.model.document.selection.getLastPosition()
+            const paragraph = writer.createElement('paragraph')
+            writer.insert(paragraph, insertPosition)
+            writer.setSelection(paragraph, 'on')
+            document.activeElement.blur()
+          })
+        }
       })
     }
   }
