@@ -10,11 +10,11 @@ import BoldPlugin from '@ckeditor/ckeditor5-basic-styles/src/bold'
 import ItalicPlugin from '@ckeditor/ckeditor5-basic-styles/src/italic'
 import LinkPlugin from '@ckeditor/ckeditor5-link/src/link'
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph'
-import Heading from '@/plugins/heading'
+import Heading from '@/plugins/ckeditor5/heading/heading'
 import HeadingButtonsUI from '@ckeditor/ckeditor5-heading/src/headingbuttonsui'
 import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote'
-import EssentialsPlugin from '@ckeditor/ckeditor5-essentials/src/essentials'
-import CustomUploadAdapterPlugin from '@/plugins/CustomUploadAdapterPlugin'
+import EssentialsPlugin from '@/plugins/ckeditor5/essentials/essentials'
+import CustomUploadAdapterPlugin from '@/plugins/image/CustomUploadAdapterPlugin'
 import Autosave from '@ckeditor/ckeditor5-autosave/src/autosave'
 import Image from '@ckeditor/ckeditor5-image/src/image'
 import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar'
@@ -28,6 +28,8 @@ import iconHeading2 from '@/assets/icons/heading2.svg'
 import iconHeading3 from '@/assets/icons/heading3.svg'
 import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed'
 import { IFRAMELY_API_ENDPOINT } from '@/utils/constant'
+import sameNodes from '@/utils/sameNodes'
+import diff from '@ckeditor/ckeditor5-utils/src/diff'
 
 export default {
   props: {
@@ -53,7 +55,10 @@ export default {
   },
   data() {
     return {
-      editor: null
+      editor: null,
+      beforeIsComposing: false,
+      changeToolbarButtonStateInterval: null,
+      toolbar: ['heading2', 'heading3', 'blockQuote', 'bold', 'italic', 'link', 'imageUpload']
     }
   },
   mounted() {
@@ -78,7 +83,7 @@ export default {
         Emptyness,
         MediaEmbed
       ],
-      toolbar: ['heading2', 'heading3', 'blockQuote', 'bold', 'italic', 'link', 'imageUpload'],
+      toolbar: this.toolbar,
       autosave: {
         save(editor) {
           return saveData(editor.getData(), articleId, clientId, functions)
@@ -90,14 +95,14 @@ export default {
           {
             model: 'heading2',
             view: 'h2',
-            title: 'Heading 2',
+            title: 'Heading 1',
             class: 'ck-heading_heading2',
             icon: iconHeading2
           },
           {
             model: 'heading3',
             view: 'h3',
-            title: 'Heading 3',
+            title: 'Heading 2',
             class: 'ck-heading_heading3',
             icon: iconHeading3
           }
@@ -231,54 +236,78 @@ export default {
         if (isIOS()) return
         checkIfShouldBeSticky()
       }
-
-      this.modifyEnterMode(editor)
+      // iOS ではリンクの先頭・末尾で半角スペースを入力後に文字を入力するとエラーが発生してしまう。
+      // これは _diffNodeLists メソッドで利用している sameNodes 関数内の比較処理に問題があることが原因である。
+      // そのため、_diffNodeLists を書き換え、バグを修正した sameNodes 関数を呼び出している。
+      editor.editing.view._renderer._diffNodeLists = (actualDomChildren, expectedDomChildren) => {
+        return diff(
+          actualDomChildren,
+          expectedDomChildren,
+          sameNodes.bind(null, editor.editing.view._renderer.domConverter.blockFiller)
+        )
+      }
+      if (isIOS()) {
+        this.modifyBackspaceMode(editor)
+        this.changeToolbarButtonStateInterval = setInterval(() => {
+          const isComposing = editor.editing.view.document.isComposing
+          if (this.beforeIsComposing === isComposing) return
+          if (!isComposing) {
+            this.changeToolbarButtonState(editor, this.toolbar, true)
+          }
+          this.beforeIsComposing = isComposing
+        }, 300)
+        this.handleChangeToolbarButtonState(editor, this.toolbar)
+      }
       this.editor = editor
       if (this.editorContent !== null) {
         editor.setData(this.editorContent)
       }
+      this.changeToolbarButtonState(editor, this.toolbar, false)
+      this.handleEditorFocus(editor)
+      this.handleEditorBlur(editor)
       this.$emit('editor-mounted')
     })
   },
+  beforeDestroy() {
+    if (isIOS()) {
+      clearInterval(this.changeToolbarButtonStateInterval)
+    }
+  },
   methods: {
-    /**
-     * Enter が押された場合、shiftEnter の処理を実行する。
-     * ただし、Enter が２回続けて押された場合は、通常通り Enter の処理を実行する（当処理では何もしない）
-     */
-    modifyEnterMode(editor) {
+    modifyBackspaceMode(editor) {
       editor.editing.view.document.on(
-        'enter',
+        'keydown',
         (evt, data) => {
-          const preOperation =
-            editor.model.document.history._operations[editor.model.document.version - 1]
-          if (!data.isSoft && !this.isEnterOperation(preOperation)) {
-            editor.execute('shiftEnter')
-            data.preventDefault()
+          // iOS では IME での入力中（isComposing が true の状態）に Backspace を押すと
+          // エラーになるため、イベントを止めている。
+          if (data.keyCode == 8 && editor.editing.view.document.isComposing) {
             evt.stop()
-            editor.editing.view.scrollToTheSelection()
           }
         },
         { priority: 'high' }
       )
     },
-    /**
-     * 改行のオペレーションかどうかを判断
-     */
-    isEnterOperation(targetOperation) {
-      // split タイプの場合は改行と判断
-      if (targetOperation.type === 'split') {
-        return true
-      }
-      // insert タイプかつ、softBreak の場合は改行と判断
-      if (
-        targetOperation.type === 'insert' &&
-        targetOperation.nodes._nodes.length === 1 &&
-        targetOperation.nodes._nodes[0].name === 'softBreak'
-      ) {
-        return true
-      }
-      // 上記以外は 改行でないと判断
-      return false
+    handleEditorFocus(editor) {
+      editor.editing.view.document.on('focus', () => {
+        this.changeToolbarButtonState(editor, this.toolbar, true)
+      })
+    },
+    handleEditorBlur(editor) {
+      editor.editing.view.document.on('blur', () => {
+        this.changeToolbarButtonState(editor, this.toolbar, false)
+      })
+    },
+    handleChangeToolbarButtonState(editor, toolbar) {
+      editor.model.document.on('change', () => {
+        const isComposing = editor.editing.view.document.isComposing
+        this.changeToolbarButtonState(editor, toolbar, !isComposing)
+      })
+    },
+    changeToolbarButtonState(editor, toolbar, isEnabled) {
+      toolbar.forEach((buttonItem) => {
+        if (buttonItem.startsWith('heading')) buttonItem = 'heading'
+        this.editor.commands.get(buttonItem).isEnabled = isEnabled
+      })
     }
   }
 }

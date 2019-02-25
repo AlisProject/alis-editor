@@ -81,13 +81,17 @@ export default class CustomUploadAdapter {
   }
 
   async uploadImage(articleId, file, config) {
-    const getResponse = await axios.get(`/api/me/articles/${articleId}/image_upload_url`, config)
-    const putResponse = await axios.put(getResponse.data.upload_url, file, {
-      headers: { 'Content-Type': config.params.upload_image_extension }
-    })
-    const responseData = { ...putResponse.config.data }
-    responseData.default = getResponse.data.show_url
-    return responseData
+    try {
+      const getResponse = await axios.get(`/api/me/articles/${articleId}/image_upload_url`, config)
+      const putResponse = await axios.put(getResponse.data.upload_url, file, {
+        headers: { 'Content-Type': config.params.upload_image_extension }
+      })
+      const responseData = { ...putResponse.config.data }
+      responseData.default = getResponse.data.show_url
+      return responseData
+    } catch (error) {
+      return Promise.reject('画像のアップロードに失敗しました')
+    }
   }
 
   getConfig(token, fileSize, imageExtension) {
