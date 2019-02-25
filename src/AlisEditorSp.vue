@@ -155,7 +155,7 @@ export default {
               /^https?:\/\/(?:www|m|business)\.facebook\.com\/media\/set\/\?set=[^/]+(\d{10,})/i
             ],
             html: (match) => {
-              const path = 'https://' + match['input']
+              const path = match['input']
               const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${
                 this.iframelyApiKey
               }&url=${encodeURIComponent(path)}`
@@ -211,7 +211,7 @@ export default {
               /^https?:\/\/instagram\.com\/(?:[a-zA-Z0-9_-]+\/)?(?:p|tv)\/([a-zA-Z0-9_-]+)$/i
             ],
             html: (match) => {
-              const path = 'https://' + match['input']
+              const path = match['input']
               const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${
                 this.iframelyApiKey
               }&url=${encodeURIComponent(path)}`
