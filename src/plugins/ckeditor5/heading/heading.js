@@ -7,7 +7,7 @@
  * @module heading/heading
  */
 
-import HeadingEditing from '@/plugins/headingediting'
+import HeadingEditing from './headingediting'
 import HeadingUI from '@ckeditor/ckeditor5-heading/src/headingui'
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin'
 

@@ -9,7 +9,7 @@
 
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin'
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph'
-import HeadingCommand from '@/commands/headingcommand'
+import HeadingCommand from './headingcommand'
 
 import priorities from '@ckeditor/ckeditor5-utils/src/priorities'
 import { upcastElementToElement } from '@ckeditor/ckeditor5-engine/src/conversion/upcast-converters'
