@@ -24,7 +24,7 @@ export default function handleKeydownEnter(editor, urlRegexp, getResourceFromIfr
         const paragraph = writer.createElement('paragraph')
         writer.insert(paragraph, insertPosition)
         editor.model.insertContent(mediaElement, insertPosition)
-        writer.setSelection(paragraph, 'on')
+        writer.setSelection(paragraph, 'in')
       })
     },
     { priority: 'highest' }
