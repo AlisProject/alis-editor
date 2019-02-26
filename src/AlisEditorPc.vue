@@ -32,11 +32,12 @@ import InsertButton from './components/InsertButton'
 import CustomUploadAdapterPlugin from '@/plugins/image/CustomUploadAdapterPlugin'
 import Autosave from '@ckeditor/ckeditor5-autosave/src/autosave'
 import Emptyness from 'ckeditor5-emptyness/src/emptyness'
-import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed'
+import MediaEmbed from '@/plugins/ckeditor5/media-embed/mediaembed'
 import saveData from '@/utils/Save'
 import iconHeading2 from '@/assets/icons/heading2.svg'
 import iconHeading3 from '@/assets/icons/heading3.svg'
 import { IFRAMELY_API_ENDPOINT, VALIDATE_URL_REGEXP } from '@/utils/constant'
+import handleKeydownEnter from '@/utils/handleKeydownEnter'
 
 export default {
   props: {
@@ -78,7 +79,7 @@ export default {
   watch: {
     isPressedEnterInTitle() {
       // selectionをタイトルからエディタに移動しselectionの位置を初期化
-      this.editor.model.change(writer => {
+      this.editor.model.change((writer) => {
         this.editor.editing.view.focus()
         writer.setSelection(null)
       })
@@ -270,6 +271,7 @@ export default {
       if (this.editorContent !== null) {
         editor.setData(this.editorContent)
       }
+      handleKeydownEnter(editor, VALIDATE_URL_REGEXP, this.functions.getResourceFromIframely)
     })
   },
   methods: {

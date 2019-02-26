@@ -26,10 +26,11 @@ import { isIOS } from '@/utils/device'
 import saveData from '@/utils/Save'
 import iconHeading2 from '@/assets/icons/heading2.svg'
 import iconHeading3 from '@/assets/icons/heading3.svg'
-import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed'
+import MediaEmbed from '@/plugins/ckeditor5/media-embed/mediaembed'
 import sameNodes from '@/utils/sameNodes'
 import diff from '@ckeditor/ckeditor5-utils/src/diff'
 import { IFRAMELY_API_ENDPOINT, VALIDATE_URL_REGEXP } from '@/utils/constant'
+import handleKeydownEnter from '@/utils/handleKeydownEnter'
 
 export default {
   props: {
@@ -67,7 +68,7 @@ export default {
   watch: {
     isPressedEnterInTitle() {
       // selectionをタイトルからエディタに移動しselectionの位置を初期化
-      this.editor.model.change(writer => {
+      this.editor.model.change((writer) => {
         this.editor.editing.view.focus()
         writer.setSelection(null)
       })
@@ -291,6 +292,7 @@ export default {
       }
       this.changeToolbarButtonState(editor, this.toolbar, false)
       this.handleEditorFocus(editor)
+      handleKeydownEnter(editor, VALIDATE_URL_REGEXP, this.functions.getResourceFromIframely)
       this.$emit('editor-mounted')
     })
   },
