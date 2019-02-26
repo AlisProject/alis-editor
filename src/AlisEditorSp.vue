@@ -278,7 +278,6 @@ export default {
       }
       this.changeToolbarButtonState(editor, this.toolbar, false)
       this.handleEditorFocus(editor)
-      this.handleEditorBlur(editor)
       this.$emit('editor-mounted')
     })
   },
@@ -304,11 +303,6 @@ export default {
     handleEditorFocus(editor) {
       editor.editing.view.document.on('focus', () => {
         this.changeToolbarButtonState(editor, this.toolbar, true)
-      })
-    },
-    handleEditorBlur(editor) {
-      editor.editing.view.document.on('blur', () => {
-        this.changeToolbarButtonState(editor, this.toolbar, false)
       })
     },
     handleChangeToolbarButtonState(editor, toolbar) {
