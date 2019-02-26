@@ -79,7 +79,7 @@ export default {
   watch: {
     isPressedEnterInTitle() {
       // selectionをタイトルからエディタに移動しselectionの位置を初期化
-      this.editor.model.change(writer => {
+      this.editor.model.change((writer) => {
         this.editor.editing.view.focus()
         writer.setSelection(null)
       })

@@ -10,6 +10,7 @@ export default function handleKeydownEnter(editor, urlRegexp, getResourceFromIfr
       const enterKeyCode = 13
 
       if (data.keyCode !== enterKeyCode || !urlRegexp.test(targetText)) return
+      evt.stop()
       try {
         await getResourceFromIframely('iframely', targetText)
       } catch (error) {
@@ -20,8 +21,10 @@ export default function handleKeydownEnter(editor, urlRegexp, getResourceFromIfr
         writer.remove(targetElement)
         const mediaElement = writer.createElement('media', { url: targetText })
         const insertPosition = editor.model.document.selection.getLastPosition()
+        const paragraph = writer.createElement('paragraph')
+        writer.insert(paragraph, insertPosition)
         editor.model.insertContent(mediaElement, insertPosition)
-        writer.setSelection(mediaElement, 'on')
+        writer.setSelection(paragraph, 'on')
       })
     },
     { priority: 'highest' }
