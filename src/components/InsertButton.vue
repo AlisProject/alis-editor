@@ -1,17 +1,20 @@
 <template>
   <div class="insert-button">
     <div
-      class="insert-button__toggle"
+      class="toggle"
       @click="toggleIsOpen"
       :class="{
         'is-open': isOpen
-      }"
-    >
-      <span class="plus-button">+</span>
+      }">
+      <button class="button">
+        <span class="plus-button">+</span>
+      </button>
     </div>
-    <ul class="insert-button__list" v-if="isOpen">
-      <li class="insert-button__listItem" @click="dispatchUpload">
-        <img class="image-upload" src="@/assets/image-upload.png" />
+    <ul class="list" v-if="isOpen">
+      <li class="item">
+        <button class="button" @click="dispatchUpload">
+          <img class="image-upload" src="@/assets/image-upload.png">
+        </button>
       </li>
     </ul>
     <input type="file" class="image-file" accept="image/*" @change="handleUpload" />
@@ -55,81 +58,75 @@ export default {
 
 <style lang="scss" scoped>
 .insert-button {
-  position: absolute;
+  display: flex;
   left: -100px;
-  top: -100px;
   margin: 8px;
-  cursor: pointer;
+  position: absolute;
+  top: -100px;
   z-index: 100;
-  display: flex;
-}
 
-.insert-button .insert-button__toggle {
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: solid 1px #ddd;
-  color: #ddd;
-  border-radius: 50%;
-  font-weight: bold;
-  padding-left: 1px;
-  padding-bottom: 1px;
-  transition: all 0.05s linear;
-  transform: rotate(0deg);
-  font-size: 25px;
-  font-weight: normal;
-  font-family: 'Yu Gothic', YuGothic;
-  box-shadow: 0 0 10px 0 hsla(0, 0%, 57%, 0.5);
-}
+  .toggle {
+    align-items: center;
+    border-radius: 50%;
+    border: solid 1px #ddd;
+    box-shadow: 0 0 10px 0 hsla(0, 0%, 57%, 0.5);
+    color: #ddd;
+    cursor: pointer;
+    display: flex;
+    font-size: 25px;
+    font-weight: bold;
+    font-weight: normal;
+    height: 30px;
+    justify-content: center;
+    padding-bottom: 1px;
+    padding-left: 1px;
+    transform: rotate(0deg);
+    transition: all 0.05s linear;
+    width: 30px;
 
-.insert-button__toggle .plus-button {
-  pointer-events: event;
-  user-select: none;
-}
+    .plus-button {
+      pointer-events: event;
+      user-select: none;
+    }
 
-.insert-button .insert-button__toggle.is-open {
-  transform: rotate(45deg);
-}
+    &.is-open {
+      transform: rotate(45deg);
+    }
+  }
 
-.insert-button .insert-button__list {
-  margin: 0;
-  padding: 0;
-  color: #fff;
-  display: flex;
-  list-style-type: none;
-  font-size: 1.4rem;
-}
+  .list {
+    margin: 0;
+    padding: 0;
+    color: #fff;
+    display: flex;
+    list-style-type: none;
+    font-size: 1.4rem;
 
-.insert-button__list .insert-button__listItem {
-  margin-left: 8px;
-  background: #fff;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: solid 1px #ddd;
-  color: #ddd;
-  border-radius: 50%;
-  font-weight: bold;
-  padding-left: 1px;
-  padding-bottom: 1px;
-  transition: all 0.05s linear;
-  transform: rotate(0deg);
-  font-size: 25px;
-  font-weight: normal;
-  font-family: 'Yu Gothic', YuGothic;
-  box-shadow: 0 0 10px 0 hsla(0, 0%, 57%, 0.5);
-}
+    .item {
+      align-items: center;
+      background: #fff;
+      border-radius: 50%;
+      border: solid 1px #ddd;
+      box-shadow: 0 0 10px 0 hsla(0, 0%, 57%, 0.5);
+      color: #ddd;
+      display: flex;
+      font-size: 25px;
+      font-weight: bold;
+      font-weight: normal;
+      height: 30px;
+      justify-content: center;
+      margin-left: 8px;
+      padding-bottom: 1px;
+      padding-left: 1px;
+      transform: rotate(0deg);
+      transition: all 400ms ease;
+      width: 30px;
 
-.insert-button__list .insert-button__listItem:hover {
-  background: #f9f9f9;
-}
-
-.insert-button__list .insert-button__listItem + .insert-button__listItem {
-  border-left: solid 1px #fff;
+      + .item {
+        border-left: solid 1px #fff;
+      }
+    }
+  }
 }
 
 .image-file {
@@ -142,5 +139,20 @@ export default {
 
 .image-upload {
   height: 15px;
+  cursor: pointer;
+}
+
+.button {
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  color: #ddd;
+  cursor: pointer;
+  font-size: 25px;
+  font-weight: normal;
+  height: 33px;
+  outline: none;
+  padding: 0;
+  width: 33px;
 }
 </style>
