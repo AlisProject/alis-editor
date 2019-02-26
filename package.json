@@ -30,6 +30,7 @@
     "axios": "^0.18.0",
     "blueimp-load-image": "^2.20.1",
     "ckeditor5-emptyness": "https://github.com/alexeckermann/ckeditor5-emptyness",
+    "url-regex": "^4.1.1",
     "vue": "^2.5.21"
   },
   "devDependencies": {
