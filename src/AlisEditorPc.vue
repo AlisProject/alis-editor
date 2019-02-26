@@ -58,6 +58,9 @@ export default {
     },
     domain: {
       type: String
+    },
+    isPressedEnterInTitle: {
+      type: Boolean
     }
   },
   components: {
@@ -70,6 +73,15 @@ export default {
         isVisible: false,
         posY: 0
       }
+    }
+  },
+  watch: {
+    isPressedEnterInTitle: function() {
+      // selectionをタイトルからエディタに移動しselectionの位置を初期化
+      this.editor.model.change(writer => {
+        this.editor.editing.view.focus()
+        writer.setSelection(null)
+      })
     }
   },
   mounted() {
