@@ -283,6 +283,7 @@ export default {
           this.beforeIsComposing = isComposing
         }, 300)
         this.handleChangeToolbarButtonState(editor, this.toolbar)
+        this.modifyBehaviorAfterInsertImage(editor)
       }
       this.editor = editor
       if (this.editorContent !== null) {
@@ -327,6 +328,23 @@ export default {
       toolbar.forEach((buttonItem) => {
         if (buttonItem.startsWith('heading')) buttonItem = 'heading'
         this.editor.commands.get(buttonItem).isEnabled = isEnabled
+      })
+    },
+    modifyBehaviorAfterInsertImage(editor) {
+      editor.model.document.on('change', (event, data) => {
+        const isInsertImageOperation = data.operations.some((operation) => {
+          if (operation.constructor.name !== 'InsertOperation') return
+          return operation.nodes && operation.nodes._nodes[0].name === 'image'
+        })
+        if (isInsertImageOperation) {
+          editor.model.change((writer) => {
+            const insertPosition = editor.model.document.selection.getLastPosition()
+            const paragraph = writer.createElement('paragraph')
+            writer.insert(paragraph, insertPosition)
+            writer.setSelection(paragraph, 'on')
+            document.activeElement.blur()
+          })
+        }
       })
     }
   }
