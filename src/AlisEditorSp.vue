@@ -257,6 +257,7 @@ export default {
           this.beforeIsComposing = isComposing
         }, 300)
         this.handleChangeToolbarButtonState(editor, this.toolbar)
+        this.modifyBehaviorAfterInsertImage(editor)
       }
       this.editor = editor
       if (this.editorContent !== null) {
@@ -265,7 +266,6 @@ export default {
       this.changeToolbarButtonState(editor, this.toolbar, false)
       this.handleEditorFocus(editor)
       this.handleEditorBlur(editor)
-      this.modifyBehaviorAfterInsertImage(editor)
       this.$emit('editor-mounted')
     })
   },
