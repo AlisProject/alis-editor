@@ -10,13 +10,13 @@ export default function handleKeydownEnter(editor, urlRegexp, getResourceFromIfr
       const enterKeyCode = 13
 
       if (data.keyCode !== enterKeyCode || !urlRegexp.test(targetText)) return
-      evt.stop()
       try {
         await getResourceFromIframely('iframely', targetText)
       } catch (error) {
         console.error(error)
         return
       }
+      evt.stop()
       editor.model.change((writer) => {
         writer.remove(targetElement)
         const mediaElement = writer.createElement('media', { url: targetText })
