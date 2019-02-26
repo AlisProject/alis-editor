@@ -65,7 +65,7 @@ export default {
     }
   },
   watch: {
-    isPressedEnterInTitle: function() {
+    isPressedEnterInTitle() {
       // selectionをタイトルからエディタに移動しselectionの位置を初期化
       this.editor.model.change(writer => {
         this.editor.editing.view.focus()
