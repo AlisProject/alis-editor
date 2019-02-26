@@ -343,7 +343,7 @@ export default {
             const insertPosition = editor.model.document.selection.getLastPosition()
             const paragraph = writer.createElement('paragraph')
             writer.insert(paragraph, insertPosition)
-            writer.setSelection(paragraph, 'on')
+            writer.setSelection(paragraph, 'in')
             document.activeElement.blur()
           })
         }
