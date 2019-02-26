@@ -30,6 +30,7 @@ import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed'
 import sameNodes from '@/utils/sameNodes'
 import diff from '@ckeditor/ckeditor5-utils/src/diff'
 import { IFRAMELY_API_ENDPOINT, VALIDATE_URL_REGEXP } from '@/utils/constant'
+import modifyBehaviorAfterInsertMedia from '@/utils/modifyBehaviorAfterInsertMedia'
 
 export default {
   props: {
@@ -279,6 +280,7 @@ export default {
       this.changeToolbarButtonState(editor, this.toolbar, false)
       this.handleEditorFocus(editor)
       this.handleEditorBlur(editor)
+      modifyBehaviorAfterInsertMedia(editor)
       this.$emit('editor-mounted')
     })
   },

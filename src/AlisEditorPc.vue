@@ -37,6 +37,7 @@ import saveData from '@/utils/Save'
 import iconHeading2 from '@/assets/icons/heading2.svg'
 import iconHeading3 from '@/assets/icons/heading3.svg'
 import { IFRAMELY_API_ENDPOINT, VALIDATE_URL_REGEXP } from '@/utils/constant'
+import modifyBehaviorAfterInsertMedia from '@/utils/modifyBehaviorAfterInsertMedia'
 
 export default {
   props: {
@@ -258,6 +259,7 @@ export default {
       if (this.editorContent !== null) {
         editor.setData(this.editorContent)
       }
+      modifyBehaviorAfterInsertMedia(editor)
     })
   },
   methods: {
