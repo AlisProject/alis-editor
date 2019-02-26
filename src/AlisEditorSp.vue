@@ -52,6 +52,9 @@ export default {
     },
     domain: {
       type: String
+    },
+    isPressedEnterInTitle: {
+      type: Boolean
     }
   },
   data() {
@@ -60,6 +63,15 @@ export default {
       beforeIsComposing: false,
       changeToolbarButtonStateInterval: null,
       toolbar: ['heading2', 'heading3', 'blockQuote', 'bold', 'italic', 'link', 'imageUpload']
+    }
+  },
+  watch: {
+    isPressedEnterInTitle() {
+      // selectionをタイトルからエディタに移動しselectionの位置を初期化
+      this.editor.model.change((writer) => {
+        this.editor.editing.view.focus()
+        writer.setSelection(null)
+      })
     }
   },
   mounted() {
@@ -272,6 +284,7 @@ export default {
           this.beforeIsComposing = isComposing
         }, 300)
         this.handleChangeToolbarButtonState(editor, this.toolbar)
+        this.modifyBehaviorAfterInsertImage(editor)
       }
       this.editor = editor
       if (this.editorContent !== null) {
@@ -279,7 +292,6 @@ export default {
       }
       this.changeToolbarButtonState(editor, this.toolbar, false)
       this.handleEditorFocus(editor)
-      this.handleEditorBlur(editor)
       handleKeydownEnter(editor, VALIDATE_URL_REGEXP, this.functions.getResourceFromIframely)
       this.$emit('editor-mounted')
     })
@@ -308,11 +320,6 @@ export default {
         this.changeToolbarButtonState(editor, this.toolbar, true)
       })
     },
-    handleEditorBlur(editor) {
-      editor.editing.view.document.on('blur', () => {
-        this.changeToolbarButtonState(editor, this.toolbar, false)
-      })
-    },
     handleChangeToolbarButtonState(editor, toolbar) {
       editor.model.document.on('change', () => {
         const isComposing = editor.editing.view.document.isComposing
@@ -323,6 +330,23 @@ export default {
       toolbar.forEach((buttonItem) => {
         if (buttonItem.startsWith('heading')) buttonItem = 'heading'
         this.editor.commands.get(buttonItem).isEnabled = isEnabled
+      })
+    },
+    modifyBehaviorAfterInsertImage(editor) {
+      editor.model.document.on('change', (event, data) => {
+        const isInsertImageOperation = data.operations.some((operation) => {
+          if (operation.constructor.name !== 'InsertOperation') return
+          return operation.nodes && operation.nodes._nodes[0].name === 'image'
+        })
+        if (isInsertImageOperation) {
+          editor.model.change((writer) => {
+            const insertPosition = editor.model.document.selection.getLastPosition()
+            const paragraph = writer.createElement('paragraph')
+            writer.insert(paragraph, insertPosition)
+            writer.setSelection(paragraph, 'on')
+            document.activeElement.blur()
+          })
+        }
       })
     }
   }
