@@ -59,9 +59,6 @@ export default {
     },
     domain: {
       type: String
-    },
-    isPressedEnterInTitle: {
-      type: Boolean
     }
   },
   components: {
@@ -74,15 +71,6 @@ export default {
         isVisible: false,
         posY: 0
       }
-    }
-  },
-  watch: {
-    isPressedEnterInTitle() {
-      // selectionをタイトルからエディタに移動しselectionの位置を初期化
-      this.editor.model.change((writer) => {
-        this.editor.editing.view.focus()
-        writer.setSelection(null)
-      })
     }
   },
   mounted() {
@@ -293,6 +281,13 @@ export default {
       } else {
         this.insertButton.isVisible = false
       }
+    },
+    focusEditor() {
+      // selection をタイトルからエディタに移動し selection の位置を初期化
+      this.editor.model.change((writer) => {
+        this.editor.editing.view.focus()
+        writer.setSelection(null)
+      })
     }
   },
   beforeDestroy() {

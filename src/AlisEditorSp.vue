@@ -52,9 +52,6 @@ export default {
     },
     domain: {
       type: String
-    },
-    isPressedEnterInTitle: {
-      type: Boolean
     }
   },
   data() {
@@ -63,15 +60,6 @@ export default {
       beforeIsComposing: false,
       changeToolbarButtonStateInterval: null,
       toolbar: ['heading2', 'heading3', 'blockQuote', 'bold', 'italic', 'link', 'imageUpload']
-    }
-  },
-  watch: {
-    isPressedEnterInTitle() {
-      // selectionをタイトルからエディタに移動しselectionの位置を初期化
-      this.editor.model.change((writer) => {
-        this.editor.editing.view.focus()
-        writer.setSelection(null)
-      })
     }
   },
   mounted() {
@@ -347,6 +335,13 @@ export default {
             document.activeElement.blur()
           })
         }
+      })
+    },
+    focusEditor() {
+      // selection をタイトルからエディタに移動し selection の位置を初期化
+      this.editor.model.change((writer) => {
+        this.editor.editing.view.focus()
+        writer.setSelection(null)
       })
     }
   }
