@@ -1,4 +1,6 @@
-export default function handleKeydownEnter(editor, urlRegexp, getResourceFromIframely) {
+import { VALIDATE_URL_REGEXP } from '@/utils/constant'
+
+export default function handleKeydownEnter(editor, getResourceFromIframely) {
   editor.editing.view.document.on(
     'keydown',
     async (evt, data) => {
@@ -9,7 +11,7 @@ export default function handleKeydownEnter(editor, urlRegexp, getResourceFromIfr
         targetElement._children._nodes[0]._data
       const enterKeyCode = 13
 
-      if (data.keyCode !== enterKeyCode || !urlRegexp.test(targetText)) return
+      if (data.keyCode !== enterKeyCode || !VALIDATE_URL_REGEXP.test(targetText)) return
       try {
         await getResourceFromIframely('iframely', targetText)
       } catch (error) {
