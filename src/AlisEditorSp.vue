@@ -162,7 +162,7 @@ export default {
       this.changeToolbarButtonState(editor, this.toolbar, false)
       this.handleEditorFocus(editor)
       handleKeydownEnter(editor, this.functions.getResourceFromIframely)
-      removeSaveStatus(editor, functions)
+      this.removeSaveStatus(editor, functions)
       this.$emit('editor-mounted')
     })
   },
