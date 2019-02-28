@@ -33,7 +33,7 @@ import CustomUploadAdapterPlugin from '@/plugins/image/CustomUploadAdapterPlugin
 import Autosave from '@ckeditor/ckeditor5-autosave/src/autosave'
 import Emptyness from 'ckeditor5-emptyness/src/emptyness'
 import MediaEmbed from '@/plugins/ckeditor5/media-embed/mediaembed'
-import saveData from '@/utils/Save'
+import saveData from '@/utils/saveData'
 import iconHeading2 from '@/assets/icons/heading2.svg'
 import iconHeading3 from '@/assets/icons/heading3.svg'
 import { IFRAMELY_API_ENDPOINT, VALIDATE_URL_REGEXP } from '@/utils/constant'
