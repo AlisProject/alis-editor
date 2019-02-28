@@ -74,8 +74,8 @@ export default {
     }
   },
   mounted() {
-    // プラスボタンの挙動制御
-    document.addEventListener('selectionchange', this.controlButton)
+    // エディタの左側にあるプラスボタンの挙動制御
+    document.addEventListener('selectionchange', this.handleSelectionChangeton)
     // propsを変数にset
     const { articleId, clientId, functions } = this
     BalloonEditor.create(document.querySelector('#editor'), {
@@ -263,14 +263,10 @@ export default {
     })
   },
   methods: {
-    controlButton() {
+    handleSelectionChangeton() {
       const selection = window.getSelection()
       const target = selection.anchorNode
-      if (target === null) {
-        this.insertButton.isVisible = false
-        return
-      }
-      if (target.nodeName !== 'P') {
+      if (target === null || target.nodeName !== 'P') {
         this.insertButton.isVisible = false
         return
       }
