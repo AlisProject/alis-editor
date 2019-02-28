@@ -9,9 +9,6 @@ export default function saveData(body, articleId, clientId, functions) {
       functions.updateBody({ body })
       await functions.putArticleBody({ articleBody, articleId })
 
-      // Update Thumbnail
-      functions.putThumbnail()
-
       // Complete save
       functions.setSaveStatus({ saveStatus: '保存済み' })
     } catch (error) {
