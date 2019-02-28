@@ -260,6 +260,7 @@ export default {
         editor.setData(this.editorContent)
       }
       handleKeydownEnter(editor, VALIDATE_URL_REGEXP, this.functions.getResourceFromIframely)
+      this.removeSaveStatus(editor, functions)
     })
   },
   methods: {
@@ -283,6 +284,11 @@ export default {
       this.editor.model.change((writer) => {
         this.editor.editing.view.focus()
         writer.setSelection(null)
+      })
+    },
+    removeSaveStatus(editor, functions) {
+      editor.model.document.on('change:data', () => {
+        functions.setSaveStatus({ saveStatus: '' })
       })
     }
   },

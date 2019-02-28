@@ -281,6 +281,7 @@ export default {
       this.changeToolbarButtonState(editor, this.toolbar, false)
       this.handleEditorFocus(editor)
       handleKeydownEnter(editor, VALIDATE_URL_REGEXP, this.functions.getResourceFromIframely)
+      removeSaveStatus(editor, functions)
       this.$emit('editor-mounted')
     })
   },
@@ -342,6 +343,11 @@ export default {
       this.editor.model.change((writer) => {
         this.editor.editing.view.focus()
         writer.setSelection(null)
+      })
+    },
+    removeSaveStatus(editor, functions) {
+      editor.model.document.on('change:data', () => {
+        functions.setSaveStatus({ saveStatus: '' })
       })
     }
   }
