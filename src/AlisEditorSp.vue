@@ -23,7 +23,7 @@ import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle'
 import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload'
 import Emptyness from 'ckeditor5-emptyness/src/emptyness'
 import { isIOS } from '@/utils/device'
-import saveData from '@/utils/Save'
+import saveData from '@/utils/saveData'
 import iconHeading2 from '@/assets/icons/heading2.svg'
 import iconHeading3 from '@/assets/icons/heading3.svg'
 import MediaEmbed from '@/plugins/ckeditor5/media-embed/mediaembed'
@@ -52,9 +52,6 @@ export default {
     },
     domain: {
       type: String
-    },
-    isPressedEnterInTitle: {
-      type: Boolean
     }
   },
   data() {
@@ -63,15 +60,6 @@ export default {
       beforeIsComposing: false,
       changeToolbarButtonStateInterval: null,
       toolbar: ['heading2', 'heading3', 'blockQuote', 'bold', 'italic', 'link', 'imageUpload']
-    }
-  },
-  watch: {
-    isPressedEnterInTitle() {
-      // selectionをタイトルからエディタに移動しselectionの位置を初期化
-      this.editor.model.change((writer) => {
-        this.editor.editing.view.focus()
-        writer.setSelection(null)
-      })
     }
   },
   mounted() {
@@ -174,6 +162,7 @@ export default {
       this.changeToolbarButtonState(editor, this.toolbar, false)
       this.handleEditorFocus(editor)
       handleKeydownEnter(editor, this.functions.getResourceFromIframely)
+      removeSaveStatus(editor, functions)
       this.$emit('editor-mounted')
     })
   },
@@ -214,7 +203,7 @@ export default {
       })
     },
     modifyBehaviorAfterInsertImage(editor) {
-      editor.model.document.on('change', (event, data) => {
+      editor.model.document.on('change:data', (event, data) => {
         const isInsertImageOperation = data.operations.some((operation) => {
           if (operation.constructor.name !== 'InsertOperation') return
           return operation.nodes && operation.nodes._nodes[0].name === 'image'
@@ -228,6 +217,18 @@ export default {
             document.activeElement.blur()
           })
         }
+      })
+    },
+    focusEditor() {
+      // selection をタイトルからエディタに移動し selection の位置を初期化
+      this.editor.model.change((writer) => {
+        this.editor.editing.view.focus()
+        writer.setSelection(null)
+      })
+    },
+    removeSaveStatus(editor, functions) {
+      editor.model.document.on('change:data', () => {
+        functions.setSaveStatus({ saveStatus: '' })
       })
     }
   }

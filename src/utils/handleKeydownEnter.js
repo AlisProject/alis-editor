@@ -8,7 +8,7 @@ export default function handleKeydownEnter(editor, getResourceFromIframely) {
       const targetText =
         targetElement._children._nodes &&
         targetElement._children._nodes[0] &&
-        targetElement._children._nodes[0]._data
+        targetElement._children._nodes[0]._data.trim()
       const enterKeyCode = 13
 
       if (data.keyCode !== enterKeyCode || !VALIDATE_URL_REGEXP.test(targetText)) return

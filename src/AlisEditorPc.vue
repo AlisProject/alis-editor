@@ -33,7 +33,7 @@ import CustomUploadAdapterPlugin from '@/plugins/image/CustomUploadAdapterPlugin
 import Autosave from '@ckeditor/ckeditor5-autosave/src/autosave'
 import Emptyness from 'ckeditor5-emptyness/src/emptyness'
 import MediaEmbed from '@/plugins/ckeditor5/media-embed/mediaembed'
-import saveData from '@/utils/Save'
+import saveData from '@/utils/saveData'
 import iconHeading2 from '@/assets/icons/heading2.svg'
 import iconHeading3 from '@/assets/icons/heading3.svg'
 import handleKeydownEnter from '@/utils/handleKeydownEnter'
@@ -59,9 +59,6 @@ export default {
     },
     domain: {
       type: String
-    },
-    isPressedEnterInTitle: {
-      type: Boolean
     }
   },
   components: {
@@ -76,18 +73,9 @@ export default {
       }
     }
   },
-  watch: {
-    isPressedEnterInTitle() {
-      // selectionをタイトルからエディタに移動しselectionの位置を初期化
-      this.editor.model.change((writer) => {
-        this.editor.editing.view.focus()
-        writer.setSelection(null)
-      })
-    }
-  },
   mounted() {
-    // プラスボタンの挙動制御
-    document.addEventListener('selectionchange', this.controlButton)
+    // エディタの左側にあるプラスボタンの挙動制御
+    document.addEventListener('selectionchange', this.handleSelectionChangeton)
     // propsを変数にset
     const { articleId, clientId, functions } = this
     BalloonEditor.create(document.querySelector('#editor'), {
@@ -153,17 +141,14 @@ export default {
         editor.setData(this.editorContent)
       }
       handleKeydownEnter(editor, this.functions.getResourceFromIframely)
+      this.removeSaveStatus(editor, functions)
     })
   },
   methods: {
-    controlButton() {
+    handleSelectionChangeton() {
       const selection = window.getSelection()
       const target = selection.anchorNode
-      if (target === null) {
-        this.insertButton.isVisible = false
-        return
-      }
-      if (target.nodeName !== 'P') {
+      if (target === null || target.nodeName !== 'P') {
         this.insertButton.isVisible = false
         return
       }
@@ -174,6 +159,18 @@ export default {
       } else {
         this.insertButton.isVisible = false
       }
+    },
+    focusEditor() {
+      // selection をタイトルからエディタに移動し selection の位置を初期化
+      this.editor.model.change((writer) => {
+        this.editor.editing.view.focus()
+        writer.setSelection(null)
+      })
+    },
+    removeSaveStatus(editor, functions) {
+      editor.model.document.on('change:data', () => {
+        functions.setSaveStatus({ saveStatus: '' })
+      })
     }
   },
   beforeDestroy() {
