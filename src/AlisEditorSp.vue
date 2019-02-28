@@ -30,7 +30,7 @@ import MediaEmbed from '@/plugins/ckeditor5/media-embed/mediaembed'
 import sameNodes from '@/utils/sameNodes'
 import diff from '@ckeditor/ckeditor5-utils/src/diff'
 import handleKeydownEnter from '@/utils/handleKeydownEnter'
-import { providers } from '@/editorConfig/mediaEmbed'
+import { providers } from '@/config/editor'
 
 export default {
   props: {

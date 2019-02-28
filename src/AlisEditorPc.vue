@@ -37,7 +37,7 @@ import saveData from '@/utils/Save'
 import iconHeading2 from '@/assets/icons/heading2.svg'
 import iconHeading3 from '@/assets/icons/heading3.svg'
 import handleKeydownEnter from '@/utils/handleKeydownEnter'
-import { providers } from '@/editorConfig/mediaEmbed'
+import { providers } from '@/config/editor'
 
 export default {
   props: {
