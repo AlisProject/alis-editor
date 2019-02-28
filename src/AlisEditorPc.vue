@@ -32,11 +32,12 @@ import InsertButton from './components/InsertButton'
 import CustomUploadAdapterPlugin from '@/plugins/image/CustomUploadAdapterPlugin'
 import Autosave from '@ckeditor/ckeditor5-autosave/src/autosave'
 import Emptyness from 'ckeditor5-emptyness/src/emptyness'
-import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed'
-import saveData from '@/utils/Save'
+import MediaEmbed from '@/plugins/ckeditor5/media-embed/mediaembed'
+import saveData from '@/utils/saveData'
 import iconHeading2 from '@/assets/icons/heading2.svg'
 import iconHeading3 from '@/assets/icons/heading3.svg'
-import { IFRAMELY_API_ENDPOINT } from '@/utils/constant'
+import handleKeydownEnter from '@/utils/handleKeydownEnter'
+import { providers } from '@/config/editor'
 
 export default {
   props: {
@@ -73,8 +74,8 @@ export default {
     }
   },
   mounted() {
-    // プラスボタンの挙動制御
-    document.addEventListener('selectionchange', this.controlButton)
+    // エディタの左側にあるプラスボタンの挙動制御
+    document.addEventListener('selectionchange', this.handleSelectionChangeton)
     // propsを変数にset
     const { articleId, clientId, functions } = this
     BalloonEditor.create(document.querySelector('#editor'), {
@@ -132,129 +133,22 @@ export default {
       },
       mediaEmbed: {
         previewsInData: false,
-        providers: [
-          {
-            name: 'twitter',
-            url: /^twitter\.com/,
-            html: (match) => {
-              const path = match['input']
-              const isTweet = path.split('/')[2] === 'status'
-              const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${
-                this.iframelyApiKey
-              }&url=${encodeURIComponent(path)}`
-              if (isTweet) {
-                return `<div class="iframely-embed">
-                     <div class="iframely-responsive">
-                       <iframe src="${iframeUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
-                       </iframe>
-                     </div>
-                   </div>`
-              }
-              const userName = path.split('/')[1]
-              return `<div class="iframe-twitter">
-                   <iframe src="https://${this.domain}/media_embed/twitter_profile/${userName}"
-                   frameborder="0" allow="autoplay; encrypted-media" allowfullscreen class="twitter-content-area">
-                   </iframe>
-                 </div>`
-            }
-          },
-          {
-            name: 'facebook',
-            url: /^facebook\.com/,
-            html: (match) => {
-              const path = 'https://' + match['input']
-              const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${
-                this.iframelyApiKey
-              }&url=${encodeURIComponent(path)}`
-              return `<div class="iframely-embed">
-                   <div class="iframely-responsive">
-                     <iframe src="${iframeUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
-                     </iframe>
-                   </div>
-                 </div>`
-            }
-          },
-          {
-            name: 'youtube',
-            url: [
-              /^youtube\.com\/watch\?v=([\w-]+)/,
-              /^youtube\.com\/v\/([\w-]+)/,
-              /^youtube\.com\/embed\/([\w-]+)/,
-              /^youtu\.be\/([\w-]+)/
-            ],
-            html: (match) => {
-              const id = match[1]
-              return `<div class="iframe-youtube">
-                   <iframe src="https://www.youtube.com/embed/${id}" class="youtube-content-area"
-                   frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
-                   </iframe>
-                 </div>`
-            }
-          },
-          {
-            name: 'gist',
-            url: /^gist\.github\.com/,
-            html: (match) => {
-              const path = 'https://' + match['input']
-              const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${
-                this.iframelyApiKey
-              }&url=${encodeURIComponent(path)}`
-              return `<div class="iframely-embed">
-                   <div class="iframely-responsive">
-                     <iframe src="${iframeUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
-                     </iframe>
-                   </div>
-                 </div>`
-            }
-          },
-          {
-            name: 'instagram',
-            url: /^www\.instagram\.com\/p\/(\w+)/,
-            html: (match) => {
-              const path = 'https://' + match['input']
-              const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${
-                this.iframelyApiKey
-              }&url=${encodeURIComponent(path)}`
-              return `<div class="iframely-embed">
-                   <div class="iframely-responsive">
-                     <iframe src="${iframeUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
-                     </iframe>
-                   </div>
-                 </div>`
-            }
-          },
-          {
-            name: 'any',
-            url: /.+/,
-            html: (match) => {
-              const path = match[0]
-              return `<div class="iframe-any">
-                   <iframe src="https://${this.domain}/media_embed/any?url=${encodeURIComponent(
-                path
-              )}"
-                   frameborder="0" allow="autoplay; encrypted-media" allowfullscreen class="any-content-area">
-                   </iframe>
-                 </div>`
-            }
-          }
-        ]
+        providers: providers(this.domain, this.iframelyApiKey)
       }
     }).then((editor) => {
       this.editor = editor
       if (this.editorContent !== null) {
         editor.setData(this.editorContent)
       }
+      handleKeydownEnter(editor, this.functions.getResourceFromIframely)
+      this.removeSaveStatus(editor, functions)
     })
   },
   methods: {
-    controlButton() {
+    handleSelectionChangeton() {
       const selection = window.getSelection()
       const target = selection.anchorNode
-      if (target === null) {
-        this.insertButton.isVisible = false
-        return
-      }
-      if (target.nodeName !== 'P') {
+      if (target === null || target.nodeName !== 'P') {
         this.insertButton.isVisible = false
         return
       }
@@ -265,6 +159,18 @@ export default {
       } else {
         this.insertButton.isVisible = false
       }
+    },
+    focusEditor() {
+      // selection をタイトルからエディタに移動し selection の位置を初期化
+      this.editor.model.change((writer) => {
+        this.editor.editing.view.focus()
+        writer.setSelection(null)
+      })
+    },
+    removeSaveStatus(editor, functions) {
+      editor.model.document.on('change:data', () => {
+        functions.setSaveStatus({ saveStatus: '' })
+      })
     }
   },
   beforeDestroy() {

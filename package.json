@@ -4,7 +4,7 @@
   "main": "dist/AlisEditor.common.js",
   "license": "GPL-3.0",
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "vue-cli-service serve src/develop.js",
     "build": "vue-cli-service build --target lib --name AlisEditor src/index.js",
     "lint": "vue-cli-service lint",
     "format": "prettier-eslint --write \"./**/*.{js,vue}\" --ignore \"./node_modules/**\" ",
@@ -30,6 +30,7 @@
     "axios": "^0.18.0",
     "blueimp-load-image": "^2.20.1",
     "ckeditor5-emptyness": "https://github.com/alexeckermann/ckeditor5-emptyness",
+    "url-regex": "^4.1.1",
     "vue": "^2.5.21"
   },
   "devDependencies": {

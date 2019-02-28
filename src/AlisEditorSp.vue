@@ -23,13 +23,14 @@ import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle'
 import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload'
 import Emptyness from 'ckeditor5-emptyness/src/emptyness'
 import { isIOS } from '@/utils/device'
-import saveData from '@/utils/Save'
+import saveData from '@/utils/saveData'
 import iconHeading2 from '@/assets/icons/heading2.svg'
 import iconHeading3 from '@/assets/icons/heading3.svg'
-import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed'
-import { IFRAMELY_API_ENDPOINT } from '@/utils/constant'
+import MediaEmbed from '@/plugins/ckeditor5/media-embed/mediaembed'
 import sameNodes from '@/utils/sameNodes'
 import diff from '@ckeditor/ckeditor5-utils/src/diff'
+import handleKeydownEnter from '@/utils/handleKeydownEnter'
+import { providers } from '@/config/editor'
 
 export default {
   props: {
@@ -118,112 +119,7 @@ export default {
       },
       mediaEmbed: {
         previewsInData: false,
-        providers: [
-          {
-            name: 'twitter',
-            url: /^twitter\.com/,
-            html: (match) => {
-              const path = match['input']
-              const isTweet = path.split('/')[2] === 'status'
-              const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${
-                this.iframelyApiKey
-              }&url=${encodeURIComponent(path)}`
-              if (isTweet) {
-                return `<div class="iframely-embed">
-                     <div class="iframely-responsive">
-                       <iframe src="${iframeUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
-                       </iframe>
-                     </div>
-                   </div>`
-              }
-              const userName = path.split('/')[1]
-              return `<div class="iframe-twitter">
-                   <iframe src="https://${this.domain}/media_embed/twitter_profile/${userName}"
-                   frameborder="0" allow="autoplay; encrypted-media" allowfullscreen class="twitter-content-area">
-                   </iframe>
-                 </div>`
-            }
-          },
-          {
-            name: 'facebook',
-            url: /^facebook\.com/,
-            html: (match) => {
-              const path = 'https://' + match['input']
-              const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${
-                this.iframelyApiKey
-              }&url=${encodeURIComponent(path)}`
-              return `<div class="iframely-embed">
-                   <div class="iframely-responsive">
-                     <iframe src="${iframeUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
-                     </iframe>
-                   </div>
-                 </div>`
-            }
-          },
-          {
-            name: 'youtube',
-            url: [
-              /^youtube\.com\/watch\?v=([\w-]+)/,
-              /^youtube\.com\/v\/([\w-]+)/,
-              /^youtube\.com\/embed\/([\w-]+)/,
-              /^youtu\.be\/([\w-]+)/
-            ],
-            html: (match) => {
-              const id = match[1]
-              return `<div class="iframe-youtube">
-                   <iframe src="https://www.youtube.com/embed/${id}" class="youtube-content-area"
-                   frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
-                   </iframe>
-                 </div>`
-            }
-          },
-          {
-            name: 'gist',
-            url: /^gist\.github\.com/,
-            html: (match) => {
-              const path = 'https://' + match['input']
-              const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${
-                this.iframelyApiKey
-              }&url=${encodeURIComponent(path)}`
-              return `<div class="iframely-embed">
-                   <div class="iframely-responsive">
-                     <iframe src="${iframeUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
-                     </iframe>
-                   </div>
-                 </div>`
-            }
-          },
-          {
-            name: 'instagram',
-            url: /^www\.instagram\.com\/p\/(\w+)/,
-            html: (match) => {
-              const path = 'https://' + match['input']
-              const iframeUrl = `${IFRAMELY_API_ENDPOINT}?app=1&api_key=${
-                this.iframelyApiKey
-              }&url=${encodeURIComponent(path)}`
-              return `<div class="iframely-embed">
-                   <div class="iframely-responsive">
-                     <iframe src="${iframeUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
-                     </iframe>
-                   </div>
-                 </div>`
-            }
-          },
-          {
-            name: 'any',
-            url: /.+/,
-            html: (match) => {
-              const path = match[0]
-              return `<div class="iframe-any">
-                   <iframe src="https://${this.domain}/media_embed/any?url=${encodeURIComponent(
-                path
-              )}"
-                   frameborder="0" allow="autoplay; encrypted-media" allowfullscreen class="any-content-area">
-                   </iframe>
-                 </div>`
-            }
-          }
-        ]
+        providers: providers(this.domain, this.iframelyApiKey)
       }
     }).then((editor) => {
       const checkIfShouldBeSticky = editor.ui.view.stickyPanel._checkIfShouldBeSticky.bind(
@@ -257,6 +153,7 @@ export default {
           this.beforeIsComposing = isComposing
         }, 300)
         this.handleChangeToolbarButtonState(editor, this.toolbar)
+        this.modifyBehaviorAfterInsertImage(editor)
       }
       this.editor = editor
       if (this.editorContent !== null) {
@@ -264,7 +161,8 @@ export default {
       }
       this.changeToolbarButtonState(editor, this.toolbar, false)
       this.handleEditorFocus(editor)
-      this.handleEditorBlur(editor)
+      handleKeydownEnter(editor, this.functions.getResourceFromIframely)
+      this.removeSaveStatus(editor, functions)
       this.$emit('editor-mounted')
     })
   },
@@ -292,11 +190,6 @@ export default {
         this.changeToolbarButtonState(editor, this.toolbar, true)
       })
     },
-    handleEditorBlur(editor) {
-      editor.editing.view.document.on('blur', () => {
-        this.changeToolbarButtonState(editor, this.toolbar, false)
-      })
-    },
     handleChangeToolbarButtonState(editor, toolbar) {
       editor.model.document.on('change', () => {
         const isComposing = editor.editing.view.document.isComposing
@@ -307,6 +200,35 @@ export default {
       toolbar.forEach((buttonItem) => {
         if (buttonItem.startsWith('heading')) buttonItem = 'heading'
         this.editor.commands.get(buttonItem).isEnabled = isEnabled
+      })
+    },
+    modifyBehaviorAfterInsertImage(editor) {
+      editor.model.document.on('change:data', (event, data) => {
+        const isInsertImageOperation = data.operations.some((operation) => {
+          if (operation.constructor.name !== 'InsertOperation') return
+          return operation.nodes && operation.nodes._nodes[0].name === 'image'
+        })
+        if (isInsertImageOperation) {
+          editor.model.change((writer) => {
+            const insertPosition = editor.model.document.selection.getLastPosition()
+            const paragraph = writer.createElement('paragraph')
+            writer.insert(paragraph, insertPosition)
+            writer.setSelection(paragraph, 'in')
+            document.activeElement.blur()
+          })
+        }
+      })
+    },
+    focusEditor() {
+      // selection をタイトルからエディタに移動し selection の位置を初期化
+      this.editor.model.change((writer) => {
+        this.editor.editing.view.focus()
+        writer.setSelection(null)
+      })
+    },
+    removeSaveStatus(editor, functions) {
+      editor.model.document.on('change:data', () => {
+        functions.setSaveStatus({ saveStatus: '' })
       })
     }
   }
