@@ -241,8 +241,8 @@ export default {
         () => {
           const targetSelection = window.getSelection()
           if (editor.model.document.selection.hasAttribute('linkHref') && targetSelection) {
-            if (targetSelection.anchorOffset == 0 ||
-              targetSelection.anchorNode.length == targetSelection.anchorOffset) {
+            if (targetSelection.anchorOffset === 0 ||
+              targetSelection.anchorNode.length === targetSelection.anchorOffset) {
               editor.model.change(writer => {
                 writer.removeSelectionAttribute('linkHref')
               })
