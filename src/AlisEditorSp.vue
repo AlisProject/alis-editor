@@ -142,7 +142,6 @@ export default {
           sameNodes.bind(null, editor.editing.view._renderer.domConverter.blockFiller)
         )
       }
-
       if (isIOS()) {
         this.modifyBackspaceMode(editor)
         this.changeToolbarButtonStateInterval = setInterval(() => {
