@@ -31,6 +31,7 @@ import sameNodes from '@/utils/sameNodes'
 import diff from '@ckeditor/ckeditor5-utils/src/diff'
 import handleKeydownEnter from '@/utils/handleKeydownEnter'
 import { providers } from '@/config/editor'
+import { updateChildrenMappings } from '@/lib/internal/renderer'
 
 export default {
   props: {
@@ -142,6 +143,7 @@ export default {
           sameNodes.bind(null, editor.editing.view._renderer.domConverter.blockFiller)
         )
       }
+
       if (isIOS()) {
         this.modifyBackspaceMode(editor)
         this.changeToolbarButtonStateInterval = setInterval(() => {
@@ -154,6 +156,9 @@ export default {
         }, 300)
         this.handleChangeToolbarButtonState(editor, this.toolbar)
         this.modifyBehaviorAfterInsertImage(editor)
+        editor.editing.view._renderer._updateChildrenMappings = (viewElement) => {
+          updateChildrenMappings.bind(editor.editing.view._renderer, viewElement)()
+        }
       }
       this.editor = editor
       if (this.editorContent !== null) {
