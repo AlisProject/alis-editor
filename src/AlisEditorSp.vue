@@ -164,6 +164,7 @@ export default {
       }
       this.changeToolbarButtonState(editor, this.toolbar, false)
       this.handleEditorFocus(editor)
+      this.removeLinkHrefAtFirstOrLastSelected(editor)
       handleKeydownEnter(editor, this.functions.getResourceFromIframely)
       this.removeSaveStatus(editor, functions)
       this.$emit('editor-mounted')
@@ -233,6 +234,23 @@ export default {
       editor.model.document.on('change:data', () => {
         functions.setSaveStatus({ saveStatus: '' })
       })
+    },
+    removeLinkHrefAtFirstOrLastSelected(editor) {
+      editor.model.document.on(
+        'change',
+        () => {
+          const targetSelection = window.getSelection()
+          if (editor.model.document.selection.hasAttribute('linkHref') && targetSelection) {
+            if (targetSelection.anchorOffset === 0 ||
+              targetSelection.anchorNode.length === targetSelection.anchorOffset) {
+              editor.model.change(writer => {
+                writer.removeSelectionAttribute('linkHref')
+              })
+            }
+          }
+        },
+        { priority: 'high' }
+      )
     }
   }
 }
