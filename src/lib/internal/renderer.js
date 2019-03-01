@@ -15,7 +15,11 @@ export function sameNodes(blockFiller, actualDomChild, expectedDomChild) {
     // actualDomChild.data と expectedDomChild.data で参照しているテキストは内部処理で
     // 半角スペースが u00a0 に書き換えられているため、iOS では処理が落ちるケースがある。
     // そのため、比較前に u00a0 を半角スペースに戻した上で比較処理を行っている。
-    return actualDomChild.data.replace(/\u00a0/g, ' ') === expectedDomChild.data
+    // またゼロ幅スペース（u200B）が付与されているパターンも存在するため、空文字で置き換えを行っている。
+    return (
+      actualDomChild.data.replace(/\u00a0/g, ' ').replace(/\u200B/g, '') ===
+      expectedDomChild.data.replace(/\u00a0/g, ' ').replace(/\u200B/g, '')
+    )
   }
   // Block fillers.
   else if (
