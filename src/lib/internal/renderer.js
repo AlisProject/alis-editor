@@ -44,14 +44,14 @@ export function updateChildrenMappings(viewElement) {
     })
   )
 
-  // リンクの右側にテキストがある状態で、リンクの末尾で文字を入力した場合、
+  // リンクの右側にテキストがある状態で、そのリンクの末尾で文字を入力した場合、
   // actualDomChildren と expectedDomChildren の構造が以下のように異なってしまう。
   // （入力文字を「あ」とする）
-  // - actualDomChildren： { a: 'リンク', #text: 'あ', #text: 'テキスト' }
-  // - expectedDomChildren { a: 'リンク', #text: 'あテキスト' }
-  // actualDomChildren と expectedDomChildren は同じ構造であることが前提となっているため、
-  // 異なるとエラーが発生してしまう。
-  // そのため以下のロジックで actualDomChildren の構造が expectedDomChildren と等しくなるように
+  // - actualDomChildren：   { a: 'リンク', #text: 'あ', #text: 'テキスト' }
+  // - expectedDomChildren： { a: 'リンク', #text: 'あテキスト' }
+  // 内部ロジックでは actualDomChildren と expectedDomChildren が
+  // 同じ構造であることが前提となっているため、異なるとエラーが発生してしまう。
+  // そのため、以下のロジックで actualDomChildren の構造を expectedDomChildren と等しくなるように
   // 書き換えている。
   for (let i = 0; i < actualDomChildren.length; i++) {
     if (actualDomChildren[i].nodeName === 'A') {
