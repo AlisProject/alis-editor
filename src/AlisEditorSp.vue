@@ -27,10 +27,10 @@ import saveData from '@/utils/saveData'
 import iconHeading2 from '@/assets/icons/heading2.svg'
 import iconHeading3 from '@/assets/icons/heading3.svg'
 import MediaEmbed from '@/plugins/ckeditor5/media-embed/mediaembed'
-import sameNodes from '@/utils/sameNodes'
 import diff from '@ckeditor/ckeditor5-utils/src/diff'
 import handleKeydownEnter from '@/utils/handleKeydownEnter'
 import { providers } from '@/config/editor'
+import { sameNodes, updateChildrenMappings } from '@/lib/internal/renderer'
 
 export default {
   props: {
@@ -154,6 +154,9 @@ export default {
         }, 300)
         this.handleChangeToolbarButtonState(editor, this.toolbar)
         this.modifyBehaviorAfterInsertImage(editor)
+        editor.editing.view._renderer._updateChildrenMappings = (viewElement) => {
+          updateChildrenMappings.bind(editor.editing.view._renderer, viewElement)()
+        }
       }
       this.editor = editor
       if (this.editorContent !== null) {
