@@ -27,10 +27,10 @@ import saveData from '@/utils/saveData'
 import iconHeading2 from '@/assets/icons/heading2.svg'
 import iconHeading3 from '@/assets/icons/heading3.svg'
 import MediaEmbed from '@/plugins/ckeditor5/media-embed/mediaembed'
-import sameNodes from '@/utils/sameNodes'
 import diff from '@ckeditor/ckeditor5-utils/src/diff'
 import handleKeydownEnter from '@/utils/handleKeydownEnter'
 import { providers } from '@/config/editor'
+import { sameNodes, updateChildrenMappings } from '@/lib/internal/renderer'
 
 export default {
   props: {
@@ -154,6 +154,9 @@ export default {
         }, 300)
         this.handleChangeToolbarButtonState(editor, this.toolbar)
         this.modifyBehaviorAfterInsertImage(editor)
+        editor.editing.view._renderer._updateChildrenMappings = (viewElement) => {
+          updateChildrenMappings.bind(editor.editing.view._renderer, viewElement)()
+        }
       }
       this.editor = editor
       if (this.editorContent !== null) {
@@ -161,7 +164,9 @@ export default {
       }
       this.changeToolbarButtonState(editor, this.toolbar, false)
       this.handleEditorFocus(editor)
+      this.removeLinkHrefAtFirstOrLastSelected(editor)
       handleKeydownEnter(editor, this.functions.getResourceFromIframely)
+      this.handleEnterInLink(editor)
       this.removeSaveStatus(editor, functions)
       this.$emit('editor-mounted')
     })
@@ -230,6 +235,42 @@ export default {
       editor.model.document.on('change:data', () => {
         functions.setSaveStatus({ saveStatus: '' })
       })
+    },
+    removeLinkHrefAtFirstOrLastSelected(editor) {
+      editor.model.document.on(
+        'change',
+        () => {
+          const targetSelection = window.getSelection()
+          if (editor.model.document.selection.hasAttribute('linkHref') && targetSelection) {
+            if (
+              targetSelection.anchorOffset === 0 ||
+              targetSelection.anchorNode.length === targetSelection.anchorOffset
+            ) {
+              editor.model.change((writer) => {
+                writer.removeSelectionAttribute('linkHref')
+              })
+            }
+          }
+        },
+        { priority: 'high' }
+      )
+    },
+    handleEnterInLink(editor) {
+      editor.editing.view.document.on(
+        'keydown',
+        (evt, data) => {
+          const selection = editor.model.document.selection
+          const windowSelection = window.getSelection()
+          if (
+            data.keyCode == 13 &&
+            selection.hasAttribute('linkHref') &&
+            windowSelection.anchorNode.length !== windowSelection.anchorOffset
+          ) {
+            evt.stop()
+          }
+        },
+        { priority: 'high' }
+      )
     }
   }
 }
