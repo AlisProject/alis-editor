@@ -242,9 +242,11 @@ export default {
         () => {
           const targetSelection = window.getSelection()
           if (editor.model.document.selection.hasAttribute('linkHref') && targetSelection) {
-            if (targetSelection.anchorOffset === 0 ||
-              targetSelection.anchorNode.length === targetSelection.anchorOffset) {
-              editor.model.change(writer => {
+            if (
+              targetSelection.anchorOffset === 0 ||
+              targetSelection.anchorNode.length === targetSelection.anchorOffset
+            ) {
+              editor.model.change((writer) => {
                 writer.removeSelectionAttribute('linkHref')
               })
             }
@@ -258,7 +260,12 @@ export default {
         'keydown',
         (evt, data) => {
           const selection = editor.model.document.selection
-          if (data.keyCode == 13 && selection.hasAttribute( 'linkHref' )) {
+          const windowSelection = window.getSelection()
+          if (
+            data.keyCode == 13 &&
+            selection.hasAttribute('linkHref') &&
+            windowSelection.anchorNode.length !== windowSelection.anchorOffset
+          ) {
             evt.stop()
           }
         },
