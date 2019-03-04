@@ -1,7 +1,7 @@
 {
   "name": "@alisproject/alis-editor",
   "version": "0.1.0",
-  "main": "dist/AlisEditor.common.js",
+  "main": "dist/AlisEditor.umd.min.js",
   "license": "GPL-3.0",
   "scripts": {
     "serve": "vue-cli-service serve src/develop.js",
