@@ -176,8 +176,12 @@ export default {
     modifyBehaviorAfterInsertImage(editor) {
       editor.model.document.on('change:data', (event, data) => {
         const isInsertImageOperation = data.operations.some((operation) => {
-          if (operation.constructor.name !== 'InsertOperation') return
-          return operation.nodes && operation.nodes._nodes[0].name === 'image'
+          return (
+            operation.nodes &&
+            operation.nodes._nodes &&
+            operation.nodes._nodes[0] &&
+            operation.nodes._nodes[0].name === 'image'
+          )
         })
         if (isInsertImageOperation) {
           editor.model.change((writer) => {
