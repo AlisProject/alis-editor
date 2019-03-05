@@ -140,6 +140,7 @@ export default {
       if (this.editorContent !== null) {
         editor.setData(this.editorContent)
       }
+      this.modifyBehaviorAfterInsertImage(editor)
       handleKeydownEnter(editor, this.functions.getResourceFromIframely)
       this.removeSaveStatus(editor, functions)
     })
@@ -170,6 +171,23 @@ export default {
     removeSaveStatus(editor, functions) {
       editor.model.document.on('change:data', () => {
         functions.setSaveStatus({ saveStatus: '' })
+      })
+    },
+    modifyBehaviorAfterInsertImage(editor) {
+      editor.model.document.on('change:data', (event, data) => {
+        const isInsertImageOperation = data.operations.some((operation) => {
+          if (operation.constructor.name !== 'InsertOperation') return
+          return operation.nodes && operation.nodes._nodes[0].name === 'image'
+        })
+        if (isInsertImageOperation) {
+          editor.model.change((writer) => {
+            const insertPosition = editor.model.document.selection.getLastPosition()
+            const paragraph = writer.createElement('paragraph')
+            writer.insert(paragraph, insertPosition)
+            writer.setSelection(paragraph, 'in')
+            editor.editing.view.focus()
+          })
+        }
       })
     }
   },
