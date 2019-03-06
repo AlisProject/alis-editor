@@ -145,6 +145,10 @@ export default {
       this.removeSaveStatus(editor, functions)
     })
   },
+  beforeDestroy() {
+    document.removeEventListener('selectionchange', this.controlButton)
+    this.editor.destroy()
+  },
   methods: {
     handleSelectionChange() {
       const selection = window.getSelection()
@@ -194,9 +198,6 @@ export default {
         }
       })
     }
-  },
-  beforeDestroy() {
-    document.removeEventListener('selectionchange', this.controlButton)
   }
 }
 </script>
