@@ -1,6 +1,6 @@
 {
   "name": "@alisproject/alis-editor",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "main": "dist/AlisEditor.umd.min.js",
   "license": "GPL-3.0",
   "scripts": {
