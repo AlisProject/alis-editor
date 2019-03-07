@@ -4,7 +4,16 @@ export default function handleKeydownEnter(editor, getResourceFromIframely) {
   editor.editing.view.document.on(
     'keydown',
     async (evt, data) => {
-      const targetElement = editor.model.document.selection.getFirstPosition().parent
+      const selection = editor.model.document.selection
+      // 引用の中では media を埋め込まない
+      if (
+        selection.anchor.parent &&
+        selection.anchor.parent.parent &&
+        selection.anchor.parent.parent.name === 'blockQuote'
+      ) {
+        return
+      }
+      const targetElement = selection.getFirstPosition().parent
       const targetText =
         targetElement._children._nodes &&
         targetElement._children._nodes[0] &&
@@ -23,10 +32,12 @@ export default function handleKeydownEnter(editor, getResourceFromIframely) {
       editor.model.change((writer) => {
         writer.remove(targetElement)
         const mediaElement = writer.createElement('media', { url: targetText })
-        const insertPosition = editor.model.document.selection.getLastPosition()
+        const mediaElementInsertPosition = editor.model.document.selection.getLastPosition()
+        editor.model.insertContent(mediaElement, mediaElementInsertPosition)
+        writer.setSelection(mediaElement, 'on')
+        const paragraphInsertPosition = editor.model.document.selection.getLastPosition()
         const paragraph = writer.createElement('paragraph')
-        writer.insert(paragraph, insertPosition)
-        editor.model.insertContent(mediaElement, insertPosition)
+        writer.insert(paragraph, paragraphInsertPosition)
         writer.setSelection(paragraph, 'in')
       })
     },
