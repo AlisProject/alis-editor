@@ -175,6 +175,7 @@ export default {
     if (isIOS()) {
       clearInterval(this.changeToolbarButtonStateInterval)
     }
+    this.editor.destroy()
   },
   methods: {
     modifyBackspaceMode(editor) {
