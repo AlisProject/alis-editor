@@ -1,5 +1,6 @@
 import axios from 'axios'
 import loadImage from 'blueimp-load-image'
+import { isMobile } from '@/utils/device'
 
 export default class CustomUploadAdapter {
   constructor(loader, articleId, clientId, functions) {
@@ -27,7 +28,7 @@ export default class CustomUploadAdapter {
     )
     const MAX_UPLOAD = 10 * 1024 * 1024 // 10 MB
     return new Promise(async (resolve, reject) => {
-      if (imageExtension === 'gif') {
+      if (imageExtension === 'gif' || !isMobile()) {
         try {
           if (file.size > MAX_UPLOAD) {
             throw new Error('画像は7MBまでアップロード可能です')
