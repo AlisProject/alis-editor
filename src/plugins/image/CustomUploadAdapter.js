@@ -28,7 +28,7 @@ export default class CustomUploadAdapter {
     )
     const MAX_UPLOAD = 10 * 1024 * 1024 // 10 MB
     return new Promise(async (resolve, reject) => {
-      if (imageExtension === 'gif' || !isIOS()) {
+      if (imageExtension === 'gif') {
         try {
           if (file.size > MAX_UPLOAD) {
             throw new Error('画像は7MBまでアップロード可能です')
