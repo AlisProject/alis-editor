@@ -1,6 +1,5 @@
 import axios from 'axios'
 import loadImage from 'blueimp-load-image'
-import { isIOS } from '@/utils/device'
 
 export default class CustomUploadAdapter {
   constructor(loader, articleId, clientId, functions) {
