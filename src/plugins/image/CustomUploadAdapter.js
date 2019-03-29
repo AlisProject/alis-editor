@@ -87,7 +87,10 @@ export default class CustomUploadAdapter {
         headers: { 'Content-Type': config.params.upload_image_extension }
       })
       const responseData = { ...putResponse.config.data }
-      responseData.default = getResponse.data.show_url
+      responseData.default =
+        config.params.upload_image_extension === 'gif'
+          ? getResponse.data.show_url
+          : `${getResponse.data.show_url}?d=800x2160`
       return responseData
     } catch (error) {
       return Promise.reject('画像のアップロードに失敗しました')
