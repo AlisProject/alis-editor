@@ -5,7 +5,8 @@
       @click="toggleIsOpen"
       :class="{
         'is-open': isOpen
-      }">
+      }"
+    >
       <button class="button">
         <span class="plus-button">+</span>
       </button>
@@ -13,7 +14,7 @@
     <ul class="list" v-if="isOpen">
       <li class="item">
         <button class="button" @click="dispatchUpload">
-          <img class="image-upload" src="@/assets/image-upload.png">
+          <img class="image-upload" src="@/assets/image-upload.png" />
         </button>
       </li>
     </ul>

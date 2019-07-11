@@ -9,4 +9,3 @@ export function isAndroid() {
 export function isMobile() {
   return isIOS() || isAndroid()
 }
-
