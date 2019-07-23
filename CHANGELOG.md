@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.2.13"></a>
+## [0.2.13](https://github.com/AlisProject/alis-editor/compare/v0.2.11...v0.2.13) (2019-07-23)
+
+
+
 <a name="0.2.11"></a>
 ## [0.2.11](https://github.com/AlisProject/alis-editor/compare/v0.2.1...v0.2.11) (2019-07-16)
 
