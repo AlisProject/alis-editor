@@ -25,7 +25,8 @@ export default function handleKeydownEnter(editor, getResourceFromIframely) {
       try {
         await getResourceFromIframely('iframely', targetText)
       } catch (error) {
-        console.error(error)
+        // FIXME: ビルドに失敗するためコメントアウト
+        //console.error(error)
         return
       }
       evt.stop()
