@@ -22,6 +22,7 @@ import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph'
 import Heading from '@ckeditor/ckeditor5-heading/src/heading'
 import HeadingButtonsUI from '@ckeditor/ckeditor5-heading/src/headingbuttonsui'
 import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote'
+import CodeBlock from '@ckeditor/ckeditor5-code-block/src/codeblock'
 import EssentialsPlugin from '@/plugins/ckeditor5/essentials/essentials'
 import Image from '@ckeditor/ckeditor5-image/src/image'
 import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar'
@@ -89,6 +90,7 @@ export default {
         HeadingButtonsUI,
         Paragraph,
         BlockQuote,
+        CodeBlock,
         Image,
         ImageToolbar,
         ImageCaption,
@@ -98,7 +100,7 @@ export default {
         Emptyness,
         MediaEmbed
       ],
-      toolbar: ['heading2', 'heading3', 'blockQuote', 'bold', 'italic', 'link'],
+      toolbar: ['heading2', 'heading3', 'blockQuote', 'bold', 'italic', 'link', 'codeBlock'],
       autosave: {
         save(editor) {
           return saveData(editor.getData(), articleId, clientId, functions)

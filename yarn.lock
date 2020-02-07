@@ -803,6 +803,17 @@
     "@ckeditor/ckeditor5-engine" "^16.0.0"
     "@ckeditor/ckeditor5-utils" "^16.0.0"
 
+"@ckeditor/ckeditor5-code-block@^16.0.0":
+  version "16.0.0"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-code-block/-/ckeditor5-code-block-16.0.0.tgz#207f4eef708e931df3b883b3f0de9e7db4246233"
+  integrity sha512-QegxC4FdY+TDnQrzxcvSF/9m0uJD2jJJe2sq0QsKHp5LJOXMu6rzCGfWQdADTHMUhFyBWwmCw4e3xYupd/rwIw==
+  dependencies:
+    "@ckeditor/ckeditor5-core" "^16.0.0"
+    "@ckeditor/ckeditor5-enter" "^16.0.0"
+    "@ckeditor/ckeditor5-ui" "^16.0.0"
+    "@ckeditor/ckeditor5-utils" "^16.0.0"
+    lodash-es "^4.17.10"
+
 "@ckeditor/ckeditor5-core@^11.0.1":
   version "11.1.0"
   resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-core/-/ckeditor5-core-11.1.0.tgz#e2ff1e399a0024a2343c750f2796606196167f1a"

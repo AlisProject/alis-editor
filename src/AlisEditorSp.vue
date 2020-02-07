@@ -13,6 +13,7 @@ import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph'
 import Heading from '@ckeditor/ckeditor5-heading/src/heading'
 import HeadingButtonsUI from '@ckeditor/ckeditor5-heading/src/headingbuttonsui'
 import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote'
+import CodeBlock from '@ckeditor/ckeditor5-code-block/src/codeblock'
 import EssentialsPlugin from '@/plugins/ckeditor5/essentials/essentials'
 import CustomUploadAdapterPlugin from '@/plugins/image/CustomUploadAdapterPlugin'
 import Autosave from '@ckeditor/ckeditor5-autosave/src/autosave'
@@ -59,7 +60,7 @@ export default {
       editor: null,
       beforeIsComposing: false,
       changeToolbarButtonStateInterval: null,
-      toolbar: ['heading2', 'heading3', 'blockQuote', 'bold', 'italic', 'link', 'imageUpload']
+      toolbar: ['heading2', 'heading3', 'blockQuote', 'bold', 'italic', 'link', 'codeBlock', 'imageUpload']
     }
   },
   mounted() {
@@ -75,6 +76,7 @@ export default {
         HeadingButtonsUI,
         Paragraph,
         BlockQuote,
+        CodeBlock,
         Image,
         ImageToolbar,
         ImageCaption,

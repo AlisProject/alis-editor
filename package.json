@@ -18,6 +18,7 @@
     "@ckeditor/ckeditor5-autosave": "^16.0.0",
     "@ckeditor/ckeditor5-basic-styles": "^16.0.0",
     "@ckeditor/ckeditor5-block-quote": "^16.0.0",
+    "@ckeditor/ckeditor5-code-block": "^16.0.0",
     "@ckeditor/ckeditor5-editor-balloon": "^16.0.0",
     "@ckeditor/ckeditor5-editor-classic": "^16.0.0",
     "@ckeditor/ckeditor5-essentials": "^16.0.0",
