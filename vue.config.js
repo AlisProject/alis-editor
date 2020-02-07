@@ -24,6 +24,19 @@ module.exports = {
   },
 
   chainWebpack: (config) => {
+    const svgRule = config.module.rule('svg')
+    svgRule.exclude.add(__dirname + '/node_modules/@ckeditor')
+    svgRule.exclude.add(__dirname + '/src/assets/icons')
+    config.module
+      .rule('cke-svg')
+      .test(/ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/)
+      .use('raw-loader')
+      .loader('raw-loader')
+    config.module
+      .rule('custom-svg')
+      .test(/src[/\\]assets[/\\]icons[/\\][^/\\]+\.svg$/)
+      .use('raw-loader')
+      .loader('raw-loader')
     config.module
       .rule('svg')
       .test(/.svg$/)
