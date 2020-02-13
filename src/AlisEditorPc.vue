@@ -39,6 +39,7 @@ import iconHeading2 from '@/assets/icons/heading2.svg'
 import iconHeading3 from '@/assets/icons/heading3.svg'
 import handleKeydownEnter from '@/utils/handleKeydownEnter'
 import { providers } from '@/config/editor'
+import languages from './config/languages.js'
 
 export default {
   props: {
@@ -136,6 +137,9 @@ export default {
       mediaEmbed: {
         previewsInData: false,
         providers: providers(this.domain, this.iframelyApiKey)
+      },
+      codeBlock: {
+        languages: languages
       }
     }).then((editor) => {
       this.editor = editor

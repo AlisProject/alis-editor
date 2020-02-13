@@ -32,6 +32,7 @@ import diff from '@ckeditor/ckeditor5-utils/src/diff'
 import handleKeydownEnter from '@/utils/handleKeydownEnter'
 import { providers } from '@/config/editor'
 import { sameNodes, updateChildrenMappings } from '@/lib/internal/renderer'
+import languages from './config/languages.js'
 
 export default {
   props: {
@@ -122,6 +123,9 @@ export default {
       mediaEmbed: {
         previewsInData: false,
         providers: providers(this.domain, this.iframelyApiKey)
+      },
+      codeBlock: {
+        languages: languages
       }
     }).then((editor) => {
       const checkIfShouldBeSticky = editor.ui.view.stickyPanel._checkIfShouldBeSticky.bind(
