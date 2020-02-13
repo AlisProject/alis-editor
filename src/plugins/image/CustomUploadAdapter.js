@@ -11,7 +11,7 @@ export default class CustomUploadAdapter {
   }
 
   async upload() {
-    const file = this.loader.file
+    const file = await this.loader.file
     const imageExtension = file.type.split('image/')[1].toLowerCase()
     const allowedExtensions = ['jpeg', 'jpg', 'png', 'gif']
     if (!allowedExtensions.includes(imageExtension)) {
