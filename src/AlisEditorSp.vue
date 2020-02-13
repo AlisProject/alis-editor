@@ -61,7 +61,16 @@ export default {
       editor: null,
       beforeIsComposing: false,
       changeToolbarButtonStateInterval: null,
-      toolbar: ['heading2', 'heading3', 'blockQuote', 'bold', 'italic', 'link', 'codeBlock', 'imageUpload']
+      toolbar: [
+        'heading2',
+        'heading3',
+        'blockQuote',
+        'bold',
+        'italic',
+        'link',
+        'codeBlock',
+        'imageUpload'
+      ]
     }
   },
   mounted() {
