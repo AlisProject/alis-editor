@@ -157,6 +157,7 @@ export default {
   },
   methods: {
     handleSelectionChange() {
+      document.querySelector("#editor").setAttribute('data-empty', this.editor.isEmpty)
       const selection = window.getSelection()
       const target = selection.anchorNode
       if (target === null || target.nodeName !== 'P') {
