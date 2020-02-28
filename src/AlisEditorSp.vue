@@ -74,6 +74,7 @@ export default {
     }
   },
   mounted() {
+    document.addEventListener('selectionchange', this.handleSelectionChange)
     const { articleId, clientId, functions } = this
     ClassicEditor.create(document.querySelector('#editor'), {
       extraPlugins: [CustomUploadAdapterPlugin.bind(null, articleId, clientId, functions)],
@@ -193,6 +194,10 @@ export default {
     this.editor.destroy()
   },
   methods: {
+    handleSelectionChange() {
+      document.querySelector('#ALISEditor').setAttribute('data-empty', this.editor.isEmpty)
+    },
+
     modifyBackspaceMode(editor) {
       editor.editing.view.document.on(
         'keydown',
