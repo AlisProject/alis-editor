@@ -13,6 +13,7 @@ import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph'
 import Heading from '@/plugins/ckeditor5/heading/heading'
 import HeadingButtonsUI from '@ckeditor/ckeditor5-heading/src/headingbuttonsui'
 import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote'
+import CodeBlock from '@ckeditor/ckeditor5-code-block/src/codeblock'
 import EssentialsPlugin from '@/plugins/ckeditor5/essentials/essentials'
 import CustomUploadAdapterPlugin from '@/plugins/image/CustomUploadAdapterPlugin'
 import Autosave from '@ckeditor/ckeditor5-autosave/src/autosave'
@@ -31,6 +32,7 @@ import diff from '@ckeditor/ckeditor5-utils/src/diff'
 import handleKeydownEnter from '@/utils/handleKeydownEnter'
 import { providers } from '@/config/editor'
 import { sameNodes, updateChildrenMappings } from '@/lib/internal/renderer'
+import languages from './config/languages.js'
 
 export default {
   props: {
@@ -59,10 +61,20 @@ export default {
       editor: null,
       beforeIsComposing: false,
       changeToolbarButtonStateInterval: null,
-      toolbar: ['heading2', 'heading3', 'blockQuote', 'bold', 'italic', 'link', 'imageUpload']
+      toolbar: [
+        'heading2',
+        'heading3',
+        'blockQuote',
+        'bold',
+        'italic',
+        'link',
+        'codeBlock',
+        'imageUpload'
+      ]
     }
   },
   mounted() {
+    document.addEventListener('selectionchange', this.handleSelectionChange)
     const { articleId, clientId, functions } = this
     ClassicEditor.create(document.querySelector('#editor'), {
       extraPlugins: [CustomUploadAdapterPlugin.bind(null, articleId, clientId, functions)],
@@ -75,6 +87,7 @@ export default {
         HeadingButtonsUI,
         Paragraph,
         BlockQuote,
+        CodeBlock,
         Image,
         ImageToolbar,
         ImageCaption,
@@ -120,6 +133,9 @@ export default {
       mediaEmbed: {
         previewsInData: false,
         providers: providers(this.domain, this.iframelyApiKey)
+      },
+      codeBlock: {
+        languages: languages
       }
     }).then((editor) => {
       const checkIfShouldBeSticky = editor.ui.view.stickyPanel._checkIfShouldBeSticky.bind(
@@ -178,6 +194,10 @@ export default {
     this.editor.destroy()
   },
   methods: {
+    handleSelectionChange() {
+      document.querySelector('#ALISEditor').setAttribute('data-empty', this.editor.isEmpty)
+    },
+
     modifyBackspaceMode(editor) {
       editor.editing.view.document.on(
         'keydown',

@@ -1,5 +1,6 @@
 import isText from '@ckeditor/ckeditor5-utils/src/dom/istext'
-import { isBlockFiller } from '@ckeditor/ckeditor5-engine/src/view/filler'
+import DomConverter from '@ckeditor/ckeditor5-engine/src/view/domconverter'
+const _DomConverter = new DomConverter()
 import remove from '@ckeditor/ckeditor5-utils/src/dom/remove'
 
 export function sameNodes(blockFiller, actualDomChild, expectedDomChild) {
@@ -23,8 +24,8 @@ export function sameNodes(blockFiller, actualDomChild, expectedDomChild) {
   }
   // Block fillers.
   else if (
-    isBlockFiller(actualDomChild, blockFiller) &&
-    isBlockFiller(expectedDomChild, blockFiller)
+    _DomConverter.isBlockFiller(actualDomChild, blockFiller) &&
+    _DomConverter.isBlockFiller(expectedDomChild, blockFiller)
   ) {
     return true
   }

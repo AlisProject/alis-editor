@@ -22,6 +22,7 @@ import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph'
 import Heading from '@/plugins/ckeditor5/heading/heading'
 import HeadingButtonsUI from '@ckeditor/ckeditor5-heading/src/headingbuttonsui'
 import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote'
+import CodeBlock from '@ckeditor/ckeditor5-code-block/src/codeblock'
 import EssentialsPlugin from '@/plugins/ckeditor5/essentials/essentials'
 import Image from '@ckeditor/ckeditor5-image/src/image'
 import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar'
@@ -38,6 +39,7 @@ import iconHeading2 from '@/assets/icons/heading2.svg'
 import iconHeading3 from '@/assets/icons/heading3.svg'
 import handleKeydownEnter from '@/utils/handleKeydownEnter'
 import { providers } from '@/config/editor'
+import languages from './config/languages.js'
 
 export default {
   props: {
@@ -89,6 +91,7 @@ export default {
         HeadingButtonsUI,
         Paragraph,
         BlockQuote,
+        CodeBlock,
         Image,
         ImageToolbar,
         ImageCaption,
@@ -98,7 +101,7 @@ export default {
         Emptyness,
         MediaEmbed
       ],
-      toolbar: ['heading2', 'heading3', 'blockQuote', 'bold', 'italic', 'link'],
+      toolbar: ['heading2', 'heading3', 'blockQuote', 'bold', 'italic', 'link', 'codeBlock'],
       autosave: {
         save(editor) {
           return saveData(editor.getData(), articleId, clientId, functions)
@@ -134,6 +137,9 @@ export default {
       mediaEmbed: {
         previewsInData: false,
         providers: providers(this.domain, this.iframelyApiKey)
+      },
+      codeBlock: {
+        languages: languages
       }
     }).then((editor) => {
       this.editor = editor
@@ -151,6 +157,7 @@ export default {
   },
   methods: {
     handleSelectionChange() {
+      document.querySelector('#ALISEditor').setAttribute('data-empty', this.editor.isEmpty)
       const selection = window.getSelection()
       const target = selection.anchorNode
       if (target === null || target.nodeName !== 'P') {

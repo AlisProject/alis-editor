@@ -52,12 +52,12 @@ export default class Heading extends Plugin {
  * The configuration of the heading feature.
  * The option is used by the {@link module:heading/headingediting~HeadingEditing} feature.
  *
- *		ClassicEditor
- *			.create( {
- * 				heading: ... // Heading feature config.
- *			} )
- *			.then( ... )
- *			.catch( ... );
+ *  ClassicEditor
+ *   .create( {
+ *     heading: ... // Heading feature config.
+ *   } )
+ *   .then( ... )
+ *   .catch( ... );
  *
  * See {@link module:core/editor/editorconfig~EditorConfig all editor options}.
  *
@@ -69,14 +69,14 @@ export default class Heading extends Plugin {
  *
  * The default value is:
  *
- *		const headingConfig = {
- *			options: [
- *				{ model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
- *				{ model: 'heading1', view: 'h2', title: 'Heading 1', class: 'ck-heading_heading1' },
- *				{ model: 'heading2', view: 'h3', title: 'Heading 2', class: 'ck-heading_heading2' },
- *				{ model: 'heading3', view: 'h4', title: 'Heading 3', class: 'ck-heading_heading3' }
- *			]
- *		};
+ *  const headingConfig = {
+ *   options: [
+ *    { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+ *    { model: 'heading1', view: 'h2', title: 'Heading 1', class: 'ck-heading_heading1' },
+ *    { model: 'heading2', view: 'h3', title: 'Heading 2', class: 'ck-heading_heading2' },
+ *    { model: 'heading3', view: 'h4', title: 'Heading 3', class: 'ck-heading_heading3' }
+ *   ]
+ *  };
  *
  * It defines 3 levels of headings. In the editor model they will use `heading1`, `heading2`, and `heading3` elements.
  * Their respective view elements (so the elements output by the editor) will be: `h2`, `h3`, and `h4`. This means that
@@ -99,7 +99,7 @@ export default class Heading extends Plugin {
  * The defined headings are also available as values passed to the `'heading'` command under their model names.
  * For example, the below code will apply `<heading1>` to the current selection:
  *
- *		editor.execute( 'heading', { value: 'heading1' } );
+ *  editor.execute( 'heading', { value: 'heading1' } );
  *
  * @member {Array.<module:heading/heading~HeadingOption>} module:heading/heading~HeadingConfig#options
  */
