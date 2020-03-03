@@ -1,6 +1,13 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [0.3.0](https://github.com/AlisProject/alis-editor/compare/v0.2.11...v0.3.0) (2020-03-03)
+
+
+### Bug Fixes
+
+* "loader.file" became <Promise> due to version upgrade ([1115988](https://github.com/AlisProject/alis-editor/commit/1115988fc70efea94fa5a3dce7dbd454798ce7b0))
 
 <a name="0.2.22"></a>
 ## [0.2.22](https://github.com/AlisProject/alis-editor/compare/v0.2.21...v0.2.22) (2020-01-14)
