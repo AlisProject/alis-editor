@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.5](https://github.com/keillera/alis-editor/compare/v0.2.22...v0.3.5) (2020-12-10)
+
+
+### Bug Fixes
+
+* "loader.file" became <Promise> due to version upgrade ([1115988](https://github.com/keillera/alis-editor/commit/1115988fc70efea94fa5a3dce7dbd454798ce7b0))
+
 ### [0.3.4](https://github.com/AlisProject/alis-editor/compare/v0.3.3...v0.3.4) (2020-07-31)
 
 ### [0.3.3](https://github.com/AlisProject/alis-editor/compare/v0.3.1...v0.3.3) (2020-07-27)
