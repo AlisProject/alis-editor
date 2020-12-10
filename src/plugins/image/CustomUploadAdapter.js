@@ -41,13 +41,27 @@ export default class CustomUploadAdapter {
         }
       } else {
         loadImage.parseMetaData(file, (data) => {
-          const options = {
-            canvas: true
-          }
+          const options = {}
           if (data.exif) options.orientation = data.exif.get('Orientation')
           loadImage(
             file,
-            async (canvas) => {
+            async (img) => {
+              const canvas = document.createElement('canvas')
+              const ctx = canvas.getContext('2d')
+              // スマホを縦向きで撮った写真を挿入すると90度回転した画像がアップロードされてしまうため、
+              // Exifメタデータの回転情報が6(90度回転を表す)ならば-90度回転させてからアップロードする
+              if (options.orientation == 6) {
+                // 画像を-90度回転させるのでwidthとheightを入れ替える
+                canvas.width = img.height
+                canvas.height = img.width
+                ctx.translate(canvas.width / 2, canvas.height / 2)
+                ctx.rotate((-90 * Math.PI) / 180)
+              } else {
+                canvas.width = img.width
+                canvas.height = img.height
+                ctx.translate(canvas.width / 2, canvas.height / 2)
+              }
+              ctx.drawImage(img, -img.width / 2, -img.height / 2)
               const dataURL = canvas.toDataURL(file.type)
               const uploadFile = this.getFileObjectFromDataURL(dataURL, file.name, file.type)
               const config = this.getConfig(token, uploadFile.size, imageExtension)
