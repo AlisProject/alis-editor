@@ -41,13 +41,42 @@ export default class CustomUploadAdapter {
         }
       } else {
         loadImage.parseMetaData(file, (data) => {
-          const options = {
-            canvas: true
-          }
+          const options = {}
           if (data.exif) options.orientation = data.exif.get('Orientation')
           loadImage(
             file,
-            async (canvas) => {
+            async (img) => {
+              const canvas = document.createElement('canvas')
+              const ctx = canvas.getContext('2d')
+              // カメラ撮影時のスマホの向きにより回転された画像がアップロードされてしまうため、
+              // Exifメタデータの回転情報をもとに回転を戻してからアップロードする
+              if (options.orientation == 6) {
+                // 6: 縦向き
+                // 画像を-90度回転させるのでwidthとheightを入れ替える
+                canvas.width = img.height
+                canvas.height = img.width
+                ctx.translate(canvas.width / 2, canvas.height / 2)
+                ctx.rotate((-90 * Math.PI) / 180)
+              } else if (options.orientation == 8) {
+                // 8: 縦向き逆
+                // 画像を90度回転させるのでwidthとheightを入れ替える
+                canvas.width = img.height
+                canvas.height = img.width
+                ctx.translate(canvas.width / 2, canvas.height / 2)
+                ctx.rotate((90 * Math.PI) / 180)
+              } else if (options.orientation == 3) {
+                // 3: 横向き逆
+                canvas.width = img.width
+                canvas.height = img.height
+                ctx.translate(canvas.width / 2, canvas.height / 2)
+                ctx.rotate((180 * Math.PI) / 180)
+              } else {
+                // それ以外は1の横向き
+                canvas.width = img.width
+                canvas.height = img.height
+                ctx.translate(canvas.width / 2, canvas.height / 2)
+              }
+              ctx.drawImage(img, -img.width / 2, -img.height / 2)
               const dataURL = canvas.toDataURL(file.type)
               const uploadFile = this.getFileObjectFromDataURL(dataURL, file.name, file.type)
               const config = this.getConfig(token, uploadFile.size, imageExtension)
