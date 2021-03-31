@@ -28,7 +28,7 @@
     "@ckeditor/ckeditor5-media-embed": "^16.0.0",
     "@ckeditor/ckeditor5-paragraph": "^16.0.0",
     "@ckeditor/ckeditor5-theme-lark": "^16.0.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "blueimp-load-image": "^2.20.1",
     "ckeditor5-emptyness": "https://github.com/alexeckermann/ckeditor5-emptyness",
     "url-regex": "^5.0.0",
