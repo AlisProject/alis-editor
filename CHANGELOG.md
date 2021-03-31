@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.6](https://github.com/keillera/alis-editor/compare/v0.3.5...v0.3.6) (2021-03-31)
+
 ### [0.3.5](https://github.com/keillera/alis-editor/compare/v0.2.22...v0.3.5) (2020-12-10)
 
 
