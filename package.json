@@ -23,7 +23,7 @@
     "@ckeditor/ckeditor5-editor-classic": "^16.0.0",
     "@ckeditor/ckeditor5-essentials": "^16.0.0",
     "@ckeditor/ckeditor5-heading": "^16.0.0",
-    "@ckeditor/ckeditor5-image": "^16.0.0",
+    "@ckeditor/ckeditor5-image": "^27.0.0",
     "@ckeditor/ckeditor5-link": "^16.0.0",
     "@ckeditor/ckeditor5-media-embed": "^16.0.0",
     "@ckeditor/ckeditor5-paragraph": "^16.0.0",
