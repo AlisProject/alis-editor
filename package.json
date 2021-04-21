@@ -1,6 +1,6 @@
 {
   "name": "@alisproject/alis-editor",
-  "version": "0.3.9",
+  "version": "0.3.10",
   "main": "dist/AlisEditor.umd.min.js",
   "license": "GPL-3.0",
   "scripts": {
@@ -31,7 +31,6 @@
     "axios": "^0.21.1",
     "blueimp-load-image": "^2.20.1",
     "ckeditor5-emptyness": "https://github.com/alexeckermann/ckeditor5-emptyness",
-    "fsevents": "^2.3.2",
     "url-regex": "^5.0.0",
     "vue": "^2.6.11"
   },
