@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.20](https://github.com/AlisProject/alis-editor/compare/v0.3.19...v0.3.20) (2021-09-03)
+
 ### [0.3.19](https://github.com/AlisProject/alis-editor/compare/v0.3.16...v0.3.19) (2021-09-03)
 
 ### [0.3.16](https://github.com/AlisProject/alis-editor/compare/v0.3.15...v0.3.16) (2021-09-03)
