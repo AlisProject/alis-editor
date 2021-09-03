@@ -7,7 +7,7 @@
     "serve": "vue-cli-service serve src/develop.js",
     "build": "vue-cli-service build --target lib --name AlisEditor src/index.js",
     "lint": "vue-cli-service lint",
-    "format": "prettier-eslint --write \"./**/*.{js,vue}\" --ignore \"./node_modules/**\" ",
+    "format": "prettier-eslint --write \"$PWD/**/*.{js,vue}\" --ignore \"./node_modules/**\" ",
     "release:prebuild": "yarn build",
     "release:postbuild": "git push --follow-tags origin master && npm publish",
     "release:major": "yarn release:prebuild; yarn standard-version --release-as major; yarn release:postbuild",
