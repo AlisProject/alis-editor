@@ -39,7 +39,7 @@
     "@ckeditor/ckeditor5-dev-webpack-plugin": "^25.4.2",
     "@vue/cli-plugin-babel": "^4.5.13",
     "@vue/cli-plugin-eslint": "^4.5.13",
-    "@vue/cli-service": "^4.5.13",
+    "@vue/cli-service": "^5.0.8",
     "@vue/eslint-config-prettier": "^6.0.0",
     "babel-eslint": "10.0.3",
     "eslint": "7.32.0",
